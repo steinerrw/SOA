@@ -1,0 +1,8 @@
+frmSasInp = 137, 15, 995, 374, , 0, 0, 0, 0, C
+Alignment = 0, 0, 0, 0, C
+Initialization = 0, 0, 0, 0, C
+Control = 0, 0, 0, 0, C
+frmSoaInp = 0, 0, 0, 0, C, 0, 0, 0, 0, C
+Soa = 104, 104, 869, 524, 
+frmMain = 78, 78, 843, 498, C, 52, 52, 817, 472, C
+frmSoaTypeProcInp = 0, 0, 0, 0, C, 0, 0, 0, 0, C
