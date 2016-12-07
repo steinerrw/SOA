@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="FSoa">
+</Property><Property Name="Solution File" Value="C:\EBS\SOA\FSoa.NET\FSoa.sln">
+</Property><Property Name="Date" Value="Saturday, November 26, 2016">
+</Property><Property Name="Time" Value="5:50:48 AM">
+</Property></Properties><Event ErrorLevel="0" Project="FSoa" Source="FSoa.vbproj" Description="Project file successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\FSoa.vbproj">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="FSoa.vbproj.user" Description="Project user file successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\FSoa.vbproj.user">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="AssemblyInfo.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\AssemblyInfo.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmMain.Designer.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmMain.Designer.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmMain.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmMain.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSasInp.Designer.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSasInp.Designer.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSasInp.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSasInp.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaInp.Designer.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaInp.Designer.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaInp.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaInp.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaTypeProcInp.Designer.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaTypeProcInp.Designer.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaTypeProcInp.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaTypeProcInp.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="Module1.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\Module1.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="Module2.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\Module2.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="Module3.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\Module3.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="Module4.vb" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\Module4.vb">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="_UpgradeReport.htm" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\_UpgradeReport.htm">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmMain.resX" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmMain.resX">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSasInp.resX" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSasInp.resX">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaInp.resX" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaInp.resX">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="frmSoaTypeProcInp.resX" Description="File successfully backed up as C:\EBS\SOA\FSoa.NET\Backup\frmSoaTypeProcInp.resX">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="FSoa.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="FSoa" Source="FSoa.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="FSoa" Source="FSoa.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

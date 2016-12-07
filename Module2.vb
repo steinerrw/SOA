@@ -2,29 +2,29 @@ Option Strict Off
 Option Explicit Off
 Module Initialization
 	
-	'******FILENAMES*************
-	Public Sfile As String 'SAS  SOA
-	Public Alg_filename As String '1     1
-	Public Aln_filename As String '4     4
-	Public Cla_filename As String '11
-	Public Clp_filename As String '?     ?
-	Public GP3_filename As String '20
-	Public Map_filename As String '      3
-	Public New_filename As String '2     2
-	Public Pnt_filename As String '5
-	Public Rej_filename As String '     13
-	Public SasRpt_filename As String '6
-	Public SoaRpt_filename As String '      9
-	Public SOE_filename As String '8
-	Public SOR_filename As String '14
-	Public SO1_filename As String '10
-	Public Tmp_filename As String '     22
-	Public Vld_filename As String '12
-	Public XYZ_filename As String '7
-	Public Rt_filename As String
-	Public Lt_filename As String
-	Public DgnRt_filename As String
-	Public DgnLt_filename As String
+    '******FileNAMES*************
+    Public SFile As String 'SAS  SOA
+    Public Alg_Filename As String '1     1
+    Public Aln_Filename As String '4     4
+    Public Cla_Filename As String '11
+    Public Clp_Filename As String '?     ?
+    Public GP3_Filename As String '20
+    Public Map_Filename As String '      3
+    Public New_Filename As String '2     2
+    Public Pnt_Filename As String '5
+    Public Rej_Filename As String '     13
+    Public SasRpt_Filename As String '6
+    Public SoaRpt_Filename As String '      9
+    Public SOE_Filename As String '8
+    Public SOR_Filename As String '14
+    Public SO1_Filename As String '10
+    Public Tmp_Filename As String '     22
+    Public Vld_Filename As String '12
+    Public XYZ_Filename As String '7
+    Public Rt_Filename As String
+    Public Lt_Filename As String
+    Public DgnRt_Filename As String
+    Public DgnLt_Filename As String
 	
 	'*********************
 	Public IPos As Short

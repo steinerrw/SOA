@@ -1,6 +1,8 @@
 Option Strict Off
-Option Explicit On
-Imports Microsoft.VisualBasic.PowerPacks.Printing.Compatibility.VB6
+Option Explicit Off
+
+Imports System.Math
+'Imports Microsoft.VisualBasic.PowerPacks.Printing.Compatibility.VB6
 Friend Class frmSasInp
 	Inherits System.Windows.Forms.Form
 	
@@ -11,16 +13,16 @@ Friend Class frmSasInp
 
         idxCnt = 0
 
-        FileOpen(2, New_filename, OpenMode.Input)
-        FileOpen(4, Aln_filename, OpenMode.Output)
-        FileOpen(5, Pnt_filename, OpenMode.Append)
-        FileOpen(6, SasRpt_filename, OpenMode.Output)
-        FileOpen(11, Cla_filename, OpenMode.Output)
+        FileOpen(2, New_Filename, OpenMode.Input)
+        FileOpen(4, Aln_Filename, OpenMode.Output)
+        FileOpen(5, Pnt_Filename, OpenMode.Append)
+        FileOpen(6, SasRpt_Filename, OpenMode.Output)
+        FileOpen(11, Cla_Filename, OpenMode.Output)
         '
-        WriteLine(6, "Survey File :", New_filename, " Control Points Listing", "", "", "")
+        WriteLine(6, "Survey File :", New_Filename, " Control Points Listing", "", "", "")
         WriteLine(6, "Point", "X Coord", "Y Coord", "Z Coord", "Description", "")
         '
-        '   Line Input #2, Record
+        '   Line Input(2, Record
         Do While Not EOF(2)
             Record = LineInput(2)
             If Mid(Record, 1, 1) <> "*" And Len(Record) > 0 Then
@@ -30,15 +32,15 @@ Friend Class frmSasInp
                 iX = CDbl(Str(CDbl(Mid(Record, 21, 13))))
                 iZ = CDbl(Str(CDbl(Mid(Record, 35, 13))))
 
-                'write  #11 .cla file
+                'write  #11 .cla File
                 If Mid(Record, 49, 2) = "CL" Or Mid(Record, 49, 3) = "CLP" And Pnt > 0 Then
                     WriteLine(11, Pnt, iX, iY, iZ, Desc)
                 End If
-                'write  #5 .pnt file
+                'write  #5 .pnt File
                 If Mid(Record, 49, 2) = "XR" Or Mid(Record, 49, 2) = "XL" And Pnt > 0 Then
                     WriteLine(5, Pnt, iX, iY, iZ, Desc)
                 End If
-                'load array from .pnt file
+                'load array from .pnt File
                 If Mid(Record, 49, 3) = "POT" Or Mid(Record, 49, 4) = "POST" Or Mid(Record, 49, 2) = "PC" Or Mid(Record, 49, 3) = "POC" Or Mid(Record, 49, 2) = "PI" Or Mid(Record, 49, 2) = "PT" Or Mid(Record, 49, 2) = "RP" Or Mid(Record, 49, 3) = "PRC" Or Mid(Record, 49, 2) = "CP" Or Mid(Record, 49, 2) = "BM" Or Mid(Record, 49, 3) = "ICL" And Pnt > 0 Then
                     idxCnt = idxCnt + 1
                     idx_Pnt(idxCnt) = Pnt
@@ -51,13 +53,13 @@ Friend Class frmSasInp
         Loop
         FileClose(2)
         FileClose(11)
-        FileOpen(1, Alg_filename, OpenMode.Append)
+        FileOpen(1, Alg_Filename, OpenMode.Append)
         MySize = LOF(1)
         FileClose(1)
         If MySize = 0 Then
-            FileOpen(1, Alg_filename, OpenMode.Append)
+            FileOpen(1, Alg_Filename, OpenMode.Append)
         Else
-            FileOpen(1, Alg_filename, OpenMode.Input)
+            FileOpen(1, Alg_Filename, OpenMode.Input)
             While Not EOF(1)
                 Input(1, RecType)
                 Input(1, Col1)
@@ -65,329 +67,301 @@ Friend Class frmSasInp
                 Input(1, Col3)
                 Input(1, Col4)
                 Entry = RecType & "* " & Col1 & "* " & Col2 & "* " & Col3 & "* " & Col4 & "*"
-                lstSASData.Items.Add(Entry)
+                lstSAS_Data.Items.Add(Entry)
             End While
         End If
         FileClose(1)
         cmdReplace.Visible = False
         cmdAdd.Visible = True
-        VB6.SetDefault(cmdAdd, True)
         Save_Flag = "N"
     End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdAdd.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdAdd_Click()
-		If optType(0).Checked = True Then
-			Call Desc_Proc()
-			RC = "Y"
-		ElseIf optType(1).Checked = True Then 
-			Call Line_Proc()
-		ElseIf optType(2).Checked = True Then 
-			Call Curve_Proc()
-		End If
-		If RC = "Y" Then
-			txtPnt1.Text = ""
-			txtPnt2.Text = ""
-			txtPnt3.Text = ""
-			txtPnt4.Text = ""
-			Entry = RecType & "* " & Col1 & "* " & Col2 & "* " & Col3 & "* " & Col4 & "*"
-			lstSASData.Items.Add(Entry)
-			Col1 = ""
-			Col2 = ""
-			Col3 = ""
-			Col4 = ""
-			
-			frameType.Visible = True
-			optType(0).Checked = False
-			optType(1).Checked = False
-			optType(2).Checked = False
-			optType(0).Visible = True
-			optType(1).Visible = True
-			optType(2).Visible = True
-			
-			lstSASData.Refresh()
-		End If
-		Save_Flag = "Y"
-	End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdReplace.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdReplace_Click()
-		If optType(0).Checked = True Then
-			Call Desc_Proc()
-			RC = "Y"
-		ElseIf optType(1).Checked = True Then 
-			Call Line_Proc()
-		ElseIf optType(2).Checked = True Then 
-			Call Curve_Proc()
-		End If
-		
-		If RC = "Y" Then
-			txtPnt1.Text = ""
-			txtPnt2.Text = ""
-			txtPnt3.Text = ""
-			txtPnt4.Text = ""
-			Entry = RecType & "* " & Col1 & "* " & Col2 & "* " & Col3 & "* " & Col4 & "*"
-			lstSASData.Items.RemoveAt(lstSASData.SelectedIndex)
-			lstSASData.Items.Insert(lstIndex, Entry)
-			Col1 = ""
-			Col2 = ""
-			Col3 = ""
-			Col4 = ""
-			
-			frameType.Visible = True
-			optType(0).Checked = False
-			optType(1).Checked = False
-			optType(2).Checked = False
-			optType(0).Visible = True
-			optType(1).Visible = True
-			optType(2).Visible = True
-			
-			lstSASData.Refresh()
-		End If
-		Save_Flag = "Y"
-		cmdAdd.Visible = True
-		VB6.SetDefault(cmdAdd, True)
-		cmdReplace.Visible = False
-		VB6.SetDefault(cmdReplace, False)
-	End Sub
-	
-	Private Sub Desc_Proc()
-		Col1 = txtDescription.Text
-		Col2 = txtAlignment.Text
-		Col3 = txtStation.Text
-		Col4 = comboUnits.Text
-		RecType = "D"
-		txtDescription.Enabled = False
-		txtAlignment.Enabled = False
-		txtStation.Enabled = False
-		comboUnits.Enabled = False
-	End Sub
-	
-	Private Sub Line_Proc()
-		Focus_Flag = "N"
-		Col1 = txtPnt1.Text
-		Call Alignment.Point_Check(Val(Col1), RC, idx_Pnt, idxCnt)
-		If RC = "N" Then
-			txtPnt1.Text = ""
-			txtPnt1.SetFocus()
-			Focus_Flag = "Y"
-		End If
-		Col2 = txtPnt2.Text
-		Call Alignment.Point_Check(Val(Col2), RC, idx_Pnt, idxCnt)
-		If RC = "N" Then
-			txtPnt2.Text = ""
-			If Focus_Flag = "N" Then
-				txtPnt2.SetFocus()
-			End If
-		End If
-		Col3 = ""
-		Col4 = ""
-		RecType = "L"
-		
-		If RC = "Y" Then
-			txtPnt1.Visible = False
-			txtPnt2.Visible = False
-			lblPnt1.Visible = False
-			lblPnt2.Visible = False
-		End If
-	End Sub
-	
-	Private Sub Curve_Proc()
-		Focus_Flag = "N"
-		If optCurve(0).Checked = True Then
-			RecType = "C0"
-			Call Curve_Pnt_Proc(3)
-		ElseIf optCurve(1).Checked = True Then 
-			RecType = "C1"
-			Call Curve_Pnt_Proc(3)
-		ElseIf optCurve(2).Checked = True Then 
-			RecType = "C2"
-			Call Curve_Pnt_Proc(4)
-		End If
-		
-		If RC = "Y" Then
-			txtPnt1.Visible = False
-			txtPnt2.Visible = False
-			txtPnt3.Visible = False
-			txtPnt4.Visible = False
-			lblPnt1.Visible = False
-			lblPnt2.Visible = False
-			lblPnt3.Visible = False
-			lblPnt4.Visible = False
-			
-			frameCurve.Visible = False
-			optCurve(0).Checked = False
-			optCurve(1).Checked = False
-			optCurve(2).Checked = False
-			optCurve(0).Visible = False
-			optCurve(1).Visible = False
-			optCurve(2).Visible = False
-		End If
-	End Sub
-	
-	Private Sub Curve_Pnt_Proc(ByRef numPnt As Short)
-		Col1 = txtPnt1.Text
-		Call Point_Check(Val(Col1), RC, idx_Pnt, idxCnt)
-		If RC = "N" Then
-			txtPnt1.Text = ""
-			txtPnt1.SetFocus()
-			Focus_Flag = "Y"
-		End If
-		Col2 = txtPnt2.Text
-		Call Point_Check(Val(Col2), RC, idx_Pnt, idxCnt)
-		If RC = "N" Then
-			txtPnt2.Text = ""
-			If Focus_Flag = "N" Then
-				txtPnt2.SetFocus()
-				Focus_Flag = "Y"
-			End If
-		End If
-		Col3 = txtPnt3.Text
-		Call Point_Check(Val(Col3), RC, idx_Pnt, idxCnt)
-		If RC = "N" Then
-			txtPnt3.Text = ""
-			If Focus_Flag = "N" Then
-				txtPnt3.SetFocus()
-				Focus_Flag = "Y"
-			End If
-		End If
-		If numPnt = 4 Then
-			Col4 = txtPnt4.Text
-			Call Point_Check(Val(Col4), RC, idx_Pnt, idxCnt)
-			If RC = "N" Then
-				txtPnt4.Text = ""
-				If Focus_Flag = "N" Then
-					txtPnt4.SetFocus()
-					Focus_Flag = "Y"
-				End If
-			End If
-		End If
-	End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdCancel.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdCancel_Click()
-		If optType(0).Checked = True Then
-			txtDescription.Text = ""
-			txtAlignment.Text = ""
-			txtStation.Text = ""
-			txtDescription.SetFocus()
-		ElseIf optType(1).Checked = True Then 
-			txtPnt1.Text = ""
-			txtPnt2.Text = ""
-			txtPnt3.Text = ""
-			txtPnt4.Text = ""
-			txtPnt1.SetFocus()
-		ElseIf optType(2).Checked = True Then 
-			txtPnt1.Text = ""
-			txtPnt2.Text = ""
-			txtPnt3.Text = ""
-			txtPnt4.Text = ""
-			txtPnt1.SetFocus()
-		End If
-		cmdAdd.Visible = True
-		VB6.SetDefault(cmdAdd, True)
-		cmdReplace.Visible = False
-		VB6.SetDefault(cmdReplace, False)
-	End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdDelete.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdDelete_Click()
-		lstSASData.Items.RemoveAt(lstSASData.SelectedIndex)
-		lstSASData.Refresh()
-	End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdQuit.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdQuit_Click()
-		FileClose(2)
-		FileClose(4)
-		FileClose(5)
-		FileClose(6)
-		FileClose(7)
-		FileClose(11)
-		FileClose(20)
-		If Save_Flag = "Y" Then
-			Call cmdSave_Click()
-		End If
-		Me.Close()
-	End Sub
-	
-	Private Sub ReformData(ByRef sList As Object, ByRef RecType As Object, ByRef Col1 As Object, ByRef Col2 As Object, ByRef Col3 As Object, ByRef Col4 As Object)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Pos1 = InStr(1, sList, "* ", 0)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Pos4 = InStr(Pos3 + 2, sList, "* ", 0)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Pos5 = InStr(Pos4 + 2, sList, "*", 0)
-		
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object RecType. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		RecType = Mid(sList, 1, Pos1 - 1)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object Col1. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Col1 = Mid(sList, Pos1 + 2, Pos2 - Pos1 - 2)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object Col2. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Col2 = Mid(sList, Pos2 + 2, Pos3 - Pos2 - 2)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object Col3. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Col3 = Mid(sList, Pos3 + 2, Pos4 - Pos3 - 2)
-		'UPGRADE_WARNING: Couldn't resolve default property of object sList. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object Col4. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Col4 = Mid(sList, Pos4 + 2, Pos5 - Pos4 - 2)
-	End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdSave.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdSave_Click()
-		Dim I As Short
-		FileOpen(30, My.Application.Info.DirectoryPath & "\tmp.dat", OpenMode.Output)
-		For I = 0 To lstSASData.Items.Count - 1
-			sList = VB6.GetItemString(lstSASData, I)
-			Call ReformData(sList, RecType, Col1, Col2, Col3, Col4)
-			WriteLine(30, RecType, Col1, Col2, Col3, Col4)
-		Next I
-		
-		FileClose(30)
-		
-		FileOpen(1, Alg_filename, OpenMode.Output)
-		FileOpen(30, My.Application.Info.DirectoryPath & "\tmp.dat", OpenMode.Input)
-		Input(30, RecType)
-		Input(30, Col1)
-		Input(30, Col2)
-		Input(30, Col3)
-		Input(30, Col4)
-		While Not EOF(30)
-			WriteLine(1, RecType, Col1, Col2, Col3, Col4)
-			Input(30, RecType)
-			Input(30, Col1)
-			Input(30, Col2)
-			Input(30, Col3)
-			Input(30, Col4)
-		End While
-		' write last record...
-		WriteLine(1, RecType, Col1, Col2, Col3, Col4)
-		FileClose(1)
-		FileClose(30)
-		Kill(My.Application.Info.DirectoryPath & "\tmp.dat")
-		Save_Flag = "N"
-	End Sub
-	
-	'UPGRADE_WARNING: Event lstSASData.SelectedIndexChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-    Private Sub lstSASData_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
+
+    Private Sub cmdAdd_Click()
+        If optType1.AutoCheck = True Then
+            Call Desc_Proc()
+            RC = "Y"
+        ElseIf optType2.AutoCheck = True Then
+            Call Line_Proc()
+        ElseIf optType3.AutoCheck = True Then
+            Call Curve_Proc()
+        End If
+        If RC = "Y" Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            Entry = RecType & "* " & Col1 & "* " & Col2 & "* " & Col3 & "* " & Col4 & "*"
+            lstSAS_Data.Items.Add(Entry)
+            Col1 = ""
+            Col2 = ""
+            Col3 = ""
+            Col4 = ""
+
+            optType.Visible = True
+            optType1.Checked = False
+            optType2.Checked = False
+            optType3.Checked = False
+            optType1.Visible = True
+            optType2.Visible = True
+            optType3.Visible = True
+
+            lstSAS_Data.Refresh()
+        End If
+        Save_Flag = "Y"
+    End Sub
+
+    Private Sub cmdReplace_Click()
+        If optType1.AutoCheck = True Then
+            Call Desc_Proc()
+            RC = "Y"
+        ElseIf optType2.AutoCheck = True Then
+            Call Line_Proc()
+        ElseIf optType3.AutoCheck = True Then
+            Call Curve_Proc()
+        End If
+
+        If RC = "Y" Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            Entry = RecType & "* " & Col1 & "* " & Col2 & "* " & Col3 & "* " & Col4 & "*"
+            lstSAS_Data.Items.RemoveAt(lstSAS_Data.SelectedIndex)
+            lstSAS_Data.Items.Insert(lstIndex, Entry)
+            Col1 = ""
+            Col2 = ""
+            Col3 = ""
+            Col4 = ""
+
+            optType.Visible = True
+            optType1.Checked = False
+            optType2.Checked = False
+            optType3.Checked = False
+            optType1.Visible = True
+            optType2.Visible = True
+            optType3.Visible = True
+
+            lstSAS_Data.Refresh()
+        End If
+        Save_Flag = "Y"
+        cmdAdd.Visible = True
+        cmdReplace.Visible = False
+    End Sub
+
+    Private Sub Desc_Proc()
+        Col1 = txtDescription.Text
+        Col2 = txtAlignment.Text
+        Col3 = txtStation.Text
+        Col4 = comboUnits.Text
+        RecType = "D"
+        txtDescription.Enabled = False
+        txtAlignment.Enabled = False
+        txtStation.Enabled = False
+        comboUnits.Enabled = False
+    End Sub
+
+    Private Sub Line_Proc()
+        Focus_Flag = "N"
+        Col1 = txtPnt1.Text
+        Call Alignment.Point_Check(Val(Col1), RC, idx_Pnt, idxCnt)
+        If RC = "N" Then
+            txtPnt1.Text = ""
+            txtPnt1.Focus()
+            Focus_Flag = "Y"
+        End If
+        Col2 = txtPnt2.Text
+        Call Alignment.Point_Check(Val(Col2), RC, idx_Pnt, idxCnt)
+        If RC = "N" Then
+            txtPnt2.Text = ""
+            If Focus_Flag = "N" Then
+                txtPnt2.Focus()
+            End If
+        End If
+        Col3 = ""
+        Col4 = ""
+        RecType = "L"
+
+        If RC = "Y" Then
+            txtPnt1.Visible = False
+            txtPnt2.Visible = False
+            lblPnt1.Visible = False
+            lblPnt2.Visible = False
+        End If
+    End Sub
+
+    Private Sub Curve_Proc()
+        Focus_Flag = "N"
+        If optCurve1.AutoCheck = True Then
+            RecType = "C0"
+            Call Curve_Pnt_Proc(3)
+        ElseIf optCurve2.AutoCheck = True Then
+            RecType = "C1"
+            Call Curve_Pnt_Proc(3)
+        ElseIf optCurve3.AutoCheck = True Then
+            RecType = "C2"
+            Call Curve_Pnt_Proc(4)
+        End If
+
+        If RC = "Y" Then
+            txtPnt1.Visible = False
+            txtPnt2.Visible = False
+            txtPnt3.Visible = False
+            txtPnt4.Visible = False
+            lblPnt1.Visible = False
+            lblPnt2.Visible = False
+            lblPnt3.Visible = False
+            lblPnt4.Visible = False
+
+            optCurve.Visible = False
+            optCurve1.Checked = False
+            optCurve2.Checked = False
+            optCurve3.Checked = False
+            optCurve1.Visible = False
+            optCurve2.Visible = False
+            optCurve3.Visible = False
+        End If
+    End Sub
+
+    Private Sub Curve_Pnt_Proc(ByRef numPnt As Short)
+        Col1 = txtPnt1.Text
+        Call Point_Check(Val(Col1), RC, idx_Pnt, idxCnt)
+        If RC = "N" Then
+            txtPnt1.Text = ""
+            txtPnt1.Focus()
+            Focus_Flag = "Y"
+        End If
+        Col2 = txtPnt2.Text
+        Call Point_Check(Val(Col2), RC, idx_Pnt, idxCnt)
+        If RC = "N" Then
+            txtPnt2.Text = ""
+            If Focus_Flag = "N" Then
+                txtPnt2.Focus()
+                Focus_Flag = "Y"
+            End If
+        End If
+        Col3 = txtPnt3.Text
+        Call Point_Check(Val(Col3), RC, idx_Pnt, idxCnt)
+        If RC = "N" Then
+            txtPnt3.Text = ""
+            If Focus_Flag = "N" Then
+                txtPnt3.Focus()
+                Focus_Flag = "Y"
+            End If
+        End If
+        If numPnt = 4 Then
+            Col4 = txtPnt4.Text
+            Call Point_Check(Val(Col4), RC, idx_Pnt, idxCnt)
+            If RC = "N" Then
+                txtPnt4.Text = ""
+                If Focus_Flag = "N" Then
+                    txtPnt4.Focus()
+                    Focus_Flag = "Y"
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub cmdCancel_Click()
+        If optType1.AutoCheck = True Then
+            txtDescription.Text = ""
+            txtAlignment.Text = ""
+            txtStation.Text = ""
+            txtDescription.Focus()
+        ElseIf optType2.AutoCheck = True Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            txtPnt1.Focus()
+        ElseIf optType3.AutoCheck = True Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            txtPnt1.Focus()
+        End If
+        cmdAdd.Visible = True
+        cmdReplace.Visible = False
+    End Sub
+
+    Private Sub cmdDelete_Click()
+        lstSAS_Data.Items.RemoveAt(lstSAS_Data.SelectedIndex)
+        lstSAS_Data.Refresh()
+    End Sub
+
+    Private Sub cmdQuit_Click()
+        FileClose(2)
+        FileClose(4)
+        FileClose(5)
+        FileClose(6)
+        FileClose(7)
+        FileClose(11)
+        FileClose(20)
+        If Save_Flag = "Y" Then
+            Call cmdSave_Click()
+        End If
+        '        Me.FileClose()
+    End Sub
+
+    Private Sub ReformData(sList, RecType, Col1, Col2, Col3, Col4)
+        Pos1 = InStr(1, sList, "* ", 0)
+        Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
+        Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
+        Pos4 = InStr(Pos3 + 2, sList, "* ", 0)
+        Pos5 = InStr(Pos4 + 2, sList, "*", 0)
+
+        RecType = Mid(sList, 1, Pos1 - 1)
+        Col1 = Mid(sList, Pos1 + 2, Pos2 - Pos1 - 2)
+        Col2 = Mid(sList, Pos2 + 2, Pos3 - Pos2 - 2)
+        Col3 = Mid(sList, Pos3 + 2, Pos4 - Pos3 - 2)
+        Col4 = Mid(sList, Pos4 + 2, Pos5 - Pos4 - 2)
+    End Sub
+
+    Private Sub cmdSave_Click()
+        Dim I As Short
+        FileOpen(30, My.Application.Info.DirectoryPath & "\tmp.dat", OpenMode.Output)
+        For I = 0 To lstSAS_Data.Items.Count - 1
+            sList = lstSAS_Data.Items.Item(index:=I)
+            Call ReformData(sList, RecType, Col1, Col2, Col3, Col4)
+            WriteLine(30, RecType, Col1, Col2, Col3, Col4)
+        Next I
+
+        FileClose(30)
+
+        FileOpen(1, Alg_Filename, OpenMode.Output)
+        FileOpen(30, My.Application.Info.DirectoryPath & "\tmp.dat", OpenMode.Input)
+        Input(30, RecType)
+        Input(30, Col1)
+        Input(30, Col2)
+        Input(30, Col3)
+        Input(30, Col4)
+        While Not EOF(30)
+            WriteLine(1, RecType, Col1, Col2, Col3, Col4)
+            Input(30, RecType)
+            Input(30, Col1)
+            Input(30, Col2)
+            Input(30, Col3)
+            Input(30, Col4)
+        End While
+        ' write last record...
+        WriteLine(1, RecType, Col1, Col2, Col3, Col4)
+        FileClose(1)
+        FileClose(30)
+        Kill(My.Application.Info.DirectoryPath & "\tmp.dat")
+        Save_Flag = "N"
+    End Sub
+
+    Private Sub lstSAS_Data_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
         cmdReplace.Visible = True
         cmdAdd.Visible = False
-        VB6.SetDefault(cmdReplace, True)
 
-        sList = VB6.GetItemString(lstSASData, lstSASData.SelectedIndex)
-        lstIndex = lstSASData.SelectedIndex
+        sList = lstSAS_Data.Items.Item(lstSAS_Data.SelectedIndex)
+        lstIndex = lstSAS_Data.SelectedIndex
         Pos1 = InStr(1, sList, "* ", 0)
 
         RecType = Mid(sList, 1, Pos1 - 1)
         If RecType = "D" Then
-            optType(0).Checked = True
+            optType1.AutoCheck = True
 
             Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
             Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
@@ -412,15 +386,15 @@ Friend Class frmSasInp
                 lblPnt4.Visible = False
             End If
         ElseIf RecType = "L" Then
-            optType(1).Checked = True
+            optType2.AutoCheck = True
 
             txtDescription.Enabled = False
             txtAlignment.Enabled = False
             txtStation.Enabled = False
             comboUnits.Enabled = False
 
-            lblPnt1.Caption = "Beg Pnt"
-            lblPnt2.Caption = "End Pnt"
+            lblPnt1.Text = "Beg Pnt"
+            lblPnt2.Text = "End Pnt"
             txtPnt1.Visible = True
             txtPnt2.Visible = True
             txtPnt3.Visible = False
@@ -430,22 +404,22 @@ Friend Class frmSasInp
             lblPnt3.Visible = False
             lblPnt4.Visible = False
 
-            frameCurve.Visible = False
-            optCurve(0).Visible = False
-            optCurve(1).Visible = False
-            optCurve(2).Visible = False
+            optCurve.Visible = False
+            optCurve1.Visible = False
+            optCurve2.Visible = False
+            optCurve3.Visible = False
 
             Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
             Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
             txtPnt1.Text = Mid(sList, Pos1 + 2, Pos2 - Pos1 - 2)
             txtPnt2.Text = Mid(sList, Pos2 + 2, Pos3 - Pos2 - 2)
         ElseIf Mid(RecType, 1, 1) = "C" Then
-            optType(2).Checked = True
+            optType3.AutoCheck = True
             If Mid(RecType, 2, 1) = "0" Then
-                optCurve(0).Checked = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "PI"
-                lblPnt3.Caption = "PT"
+                optCurve1.AutoCheck = True
+                lblPnt1.Text = "PC"
+                lblPnt2.Text = "PI"
+                lblPnt3.Text = "PT"
                 txtPnt1.Visible = True
                 txtPnt2.Visible = True
                 txtPnt3.Visible = True
@@ -455,10 +429,10 @@ Friend Class frmSasInp
                 lblPnt3.Visible = True
                 lblPnt4.Visible = False
             ElseIf Mid(RecType, 2, 1) = "1" Then
-                optCurve(1).Checked = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "POC"
-                lblPnt3.Caption = "PT"
+                optCurve2.AutoCheck = True
+                lblPnt1.Text = "PC"
+                lblPnt2.Text = "POC"
+                lblPnt3.Text = "PT"
                 txtPnt1.Visible = True
                 txtPnt2.Visible = True
                 txtPnt3.Visible = True
@@ -468,11 +442,11 @@ Friend Class frmSasInp
                 lblPnt3.Visible = True
                 lblPnt4.Visible = False
             ElseIf Mid(RecType, 2, 1) = "2" Then
-                optCurve(2).Checked = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "POST"
-                lblPnt3.Caption = "POST"
-                lblPnt4.Caption = "PT"
+                optCurve3.AutoCheck = True
+                lblPnt1.Text = "PC"
+                lblPnt2.Text = "POST"
+                lblPnt3.Text = "POST"
+                lblPnt4.Text = "PT"
                 txtPnt1.Visible = True
                 txtPnt2.Visible = True
                 txtPnt3.Visible = True
@@ -493,11 +467,11 @@ Friend Class frmSasInp
             txtPnt4.Text = Mid(sList, Pos4 + 2, Pos5 - Pos4 - 2)
         End If
     End Sub
-	
+
     Public Sub mnuRunAlign_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
 
-        For I = 0 To lstSASData.Items.Count - 1
-            sList = VB6.GetItemString(lstSASData, I)
+        For I = 0 To lstSAS_Data.Items.Count - 1
+            sList = VB6.GetItemString(lstSAS_Data, I)
             If Mid(sList, 1, 1) = "D" Then
                 Call ReformData(sList, RecType, Col1, Col2, Col3, Col4)
                 Desc = Col1
@@ -518,18 +492,17 @@ Friend Class frmSasInp
                 IPN(2) = CShort(Str(CDbl(Col2)))
                 Call Find_XYZ(IPN, x, y, z, NPT)
                 sta(1) = ESta
-                'UPGRADE_WARNING: Couldn't resolve default property of object Dist(x(1), y(1), x(2), y(2)). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 sta(2) = sta(1) + Dist(x(1), y(1), x(2), y(2))
                 ESta = sta(2)
                 dY = y(2) - y(1)
                 dX = x(2) - x(1)
 
                 CC(1) = dY
-                CC(1) = CDbl(VB6.Format(CC(1), "#####0.000"))
+                CC(1) = CDbl(Format(CC(1), "#####0.000"))
                 CC(2) = -dX
-                CC(2) = CDbl(VB6.Format(CC(2), "#####0.000"))
+                CC(2) = CDbl(Format(CC(2), "#####0.000"))
                 CC(3) = -dY * x(1) + dX * y(1)
-                CC(3) = CDbl(VB6.Format(CC(3), "#####0.000"))
+                CC(3) = CDbl(Format(CC(3), "#####0.000"))
 
                 Call Find_Bearing(x(1), y(1), x(2), y(2), Bearing)
                 Length = sta(2) - sta(1)
@@ -554,17 +527,17 @@ Friend Class frmSasInp
                 WriteLine(6, "", "", "", "", "", "")
                 WriteLine(6, "Point", "X", "Y", "Z", "STA", "")
                 For K = 1 To NPT
-                    x(K) = CDbl(VB6.Format(x(K), "#####0.000"))
-                    y(K) = CDbl(VB6.Format(y(K), "#####0.000"))
-                    z(K) = CDbl(VB6.Format(z(K), "#####0.000"))
-                    sta(K) = CDbl(VB6.Format(sta(K), "#####0.000"))
+                    x(K) = CDbl(Format(x(K), "#####0.000"))
+                    y(K) = CDbl(Format(y(K), "#####0.000"))
+                    z(K) = CDbl(Format(z(K), "#####0.000"))
+                    sta(K) = CDbl(Format(sta(K), "#####0.000"))
                     WriteLine(6, LDesc(K), x(K), y(K), z(K), sta(K), "")
                 Next K
                 '
                 WriteLine(4, Align, ElemArray(NumElem), Desc, x(1), y(1), x(2), y(2), x(3), y(3), sta(1), sta(2), sta(3), CC(1), CC(2), CC(3), DirArray(NumElem))
                 '
-                Length = CDbl(VB6.Format(Length, "#####0.000"))
-                Bearing = VB6.Format(Bearing, "#####0.000")
+                Length = CDbl(Format(Length, "#####0.000"))
+                Bearing = Format(Bearing, "#####0.000")
                 WriteLine(6, "Length=", Length, "Bearing=", Bearing, "", "")
                 '
             ElseIf Mid(sList, 1, 1) = "C" Then
@@ -596,32 +569,27 @@ Friend Class frmSasInp
                     Call Find_PI(IPN, x, y)
                     Call Find_POC(IPN, x, y, NPT, x0, y0, Ang, dir_Renamed, rad)
                 End If
-                'UPGRADE_WARNING: Couldn't resolve default property of object Dist(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 TanLen = Dist(x(1), y(1), x(2), y(2))
-                TanLen = CDbl(VB6.Format(TanLen, "#####0.000"))
-                'UPGRADE_WARNING: Couldn't resolve default property of object Dist(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                TanLen = CDbl(Format(TanLen, "#####0.000"))
                 ChdLen = Dist(x(1), y(1), x(3), y(3))
-                ChdLen = CDbl(VB6.Format(ChdLen, "#####0.000"))
-                'UPGRADE_WARNING: Couldn't resolve default property of object Dist(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                ChdLen = CDbl(Format(ChdLen, "#####0.000"))
                 ExtLen = Dist(x0, y0, x(2), y(2)) - rad
-                ExtLen = CDbl(VB6.Format(ExtLen, "#####0.000"))
+                ExtLen = CDbl(Format(ExtLen, "#####0.000"))
                 curveLength = rad * Ang
-                curveLength = CDbl(VB6.Format(curveLength, "#####0.000"))
-                'UPGRADE_WARNING: Couldn't resolve default property of object Rad2Deg(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                curveLength = CDbl(Format(curveLength, "#####0.000"))
                 Angle = Rad2Deg(Ang)
                 Call DdmmssConv(Angle, Delta)
                 sta(1) = ESta
-                'UPGRADE_WARNING: Couldn't resolve default property of object Dist(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
                 sta(2) = ESta + Dist(x(1), y(1), x(2), y(2))
                 sta(3) = ESta + curveLength
                 ESta = sta(3)
 
                 CC(1) = x0
-                CC(1) = CDbl(VB6.Format(CC(1), "#####0.000"))
+                CC(1) = CDbl(Format(CC(1), "#####0.000"))
                 CC(2) = y0
-                CC(2) = CDbl(VB6.Format(CC(2), "#####0.000"))
+                CC(2) = CDbl(Format(CC(2), "#####0.000"))
                 CC(3) = rad
-                CC(3) = CDbl(VB6.Format(CC(3), "#####0.000"))
+                CC(3) = CDbl(Format(CC(3), "#####0.000"))
 
                 Angle = 5729.578 / rad
                 Call DdmmssConv(Angle, Degree)
@@ -646,10 +614,10 @@ Friend Class frmSasInp
                 WriteLine(6, "", "", "", "", "", "")
                 WriteLine(6, "Point", "X", "Y", "Z", "STA", "")
                 For K = 1 To NPT
-                    x(K) = CDbl(VB6.Format(x(K), "#####0.000"))
-                    y(K) = CDbl(VB6.Format(y(K), "#####0.000"))
-                    z(K) = CDbl(VB6.Format(z(K), "#####0.000"))
-                    sta(K) = CDbl(VB6.Format(sta(K), "#####0.000"))
+                    x(K) = CDbl(Format(x(K), "#####0.000"))
+                    y(K) = CDbl(Format(y(K), "#####0.000"))
+                    z(K) = CDbl(Format(z(K), "#####0.000"))
+                    sta(K) = CDbl(Format(sta(K), "#####0.000"))
                     WriteLine(6, LDesc(K), x(K), y(K), z(K), sta(K), "")
                 Next K
                 '
@@ -672,7 +640,7 @@ Friend Class frmSasInp
         mnuWithSOE.Visible = True
         mnuSasPrint.Visible = True
     End Sub
-	
+
     Public Sub mnuWithSOE_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
 
         Dim IReturn As Short
@@ -704,9 +672,9 @@ Friend Class frmSasInp
         lblPnt2.Visible = False
         lblPnt3.Visible = False
         lblPnt4.Visible = False
-        lstSASData.Visible = False
-        frameType.Visible = False
-        frameCurve.Visible = False
+        lstSAS_Data.Visible = False
+        optType.Visible = False
+        optCurve.Visible = False
 
         txtBegAlign.Visible = True
         lblBegAlign.Visible = True
@@ -714,19 +682,19 @@ Friend Class frmSasInp
         lblGP3Cnt.Visible = True
         cmdProcess.Visible = True
         VB6.SetDefault(cmdProcess, True)
-        txtBegAlign.SetFocus()
+        txtBegAlign.Focus()
 
-        '   Open SasRpt_filename For Append As #6
-        '   Open XYZ_filename For Output As #7
-        '   Open GP3_filename For Output As #20
+        '   FileOpen SasRpt_Filename For Append As #6
+        '   FileOpen XYZ_Filename For Output As #7
+        '   FileOpen GP3_Filename For Output As #20
         '
-        '   Open SOE_filename For Input As #8
-        '   Open SOR_filename For Output As #14
+        '   FileOpen SOE_Filename For Input As #8
+        '   FileOpen SOR_Filename For Output As #14
 
-        IReturn = Shell("c:\soesort.bat" & " " & SOE_filename & " " & " " & SOR_filename)
+        IReturn = Shell("c:\soesort.bat" & " " & SOE_Filename & " " & " " & SOR_Filename)
 
         '   While Not EOF(8)
-        '      Line Input #8, Record
+        '      Line Input(8, Record
         '      If Mid(Record, 1, 1) <> "*" Then
         '         If Mid(Record, 1, 5) <> "     " Then
         '            SoePnt = Mid(Record, 1, 5)
@@ -742,11 +710,11 @@ Friend Class frmSasInp
         '               SoeOff = SoeOff + 200000000
         '            End If
         '            Entry = SoeSta & "*" & SoeOff & "*" & SoePnt & "*" & SoeElv & "*" & SoeDesc & "*"
-        '            lstSOESort.AddItem Entry
+        '            lstSOESort.Items.Add Entry
         '         End If
         '      End If
         '   Wend
-        '   Close #8
+        '   FileClose(8
         '   For Cnt = 0 To lstSOESort.ListCount - 1
         '      sList = lstSOESort.List(Cnt)
         '      Pos1 = InStr(1, sList, "*", 0)
@@ -768,493 +736,36 @@ Friend Class frmSasInp
         '      SoePnt = Mid(sList, Pos2 + 1, Pos3 - Pos2 - 1)
         '      SoeElv = Mid(sList, Pos3 + 1, Pos4 - Pos3 - 1)
         '      SoeDesc = Mid(sList, Pos4 + 1, Pos5 - Pos4 - 1)
-        '      Write #14, SoePnt, SoeSta, SoeOff, SoeElv, SoeDesc
+        '      Write(14, SoePnt, SoeSta, SoeOff, SoeElv, SoeDesc
         '   Next Cnt
-        '   Close #14
+        '   FileClose(14
         '
     End Sub
-	
-	'UPGRADE_ISSUE: CommandButton event cmdProcess.Click was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="ABD9AF39-7E24-4AFF-AD8D-3675C1AA3054"'
-	Private Sub cmdProcess_Click()
-		'
-		FileOpen(6, SasRpt_filename, OpenMode.Append)
-		FileOpen(7, XYZ_filename, OpenMode.Output)
-		FileOpen(20, GP3_filename, OpenMode.Output)
-		'
-		FileOpen(10, SO1_filename, OpenMode.Output)
-		FileOpen(14, SOR_filename, OpenMode.Input)
-		
-		WriteLine(6, "", "", "", "", "", "")
-		WriteLine(6, "", "", "", "", "", "")
-		WriteLine(6, "XYZ Conversion Report", "", "", "", "", "")
-		WriteLine(6, "X Coord", "Y Coord", "Z Coord", "Station", "Offset", "Elevation ")
-		
-		If txtGP3Cnt.Text = "" Then
-			GP3Cnt = 1000
-		Else
-			GP3Cnt = Val(txtGP3Cnt.Text)
-		End If
-		For Cnt = 1 To TotElem
-			If Val(txtBegAlign.Text) = AlignArray(Cnt) Then
-				IC = Cnt
-				While Not EOF(14)
-					Record = LineInput(14)
-					If Mid(Record, 1, 1) <> "*" Then
-						'
-						Pos1 = InStr(1, Record, ",", 0)
-						Pos2 = InStr(Pos1 + 1, Record, ",", 0)
-						Pos3 = InStr(Pos2 + 1, Record, ",", 0)
-						Pos4 = InStr(Pos3 + 1, Record, ",", 0)
-						
-						SoePnt = CShort(Mid(Record, 1, Pos1 - 1))
-						SoeSta = CDbl(Mid(Record, Pos1 + 1, Pos2 - Pos1 - 1))
-						SoeOff = CDbl(Mid(Record, Pos2 + 1, Pos3 - Pos2 - 1))
-						SoeElv = CDbl(Mid(Record, Pos3 + 1, Pos4 - Pos3 - 1))
-						SoeDesc = Mid(Record, Pos4 + 1, Len(Record) - Pos4)
-						'
-200: If ElemArray(IC) = "C" Then
-							StaDist = StaArray(IC, 3) - SoeSta
-							If StaArray(IC, 3) > SoeSta Or System.Math.Abs(StaDist) <= 1 Then
-								If SoeOff = 0 Then
-									CenterElev = SoeElv
-									Call curveStat(CArray(IC, 1), CArray(IC, 2), XArray(IC, 1), YArray(IC, 1), StaArray(IC, 1), SoeSta, DirArray(IC), CArray(IC, 3), xc, yc)
-								End If
-								Call xyzCoord(xc, yc, CenterElev, CArray(IC, 1), CArray(IC, 2), XArray(IC, 2), YArray(IC, 2), offset, elev, ElemArray(IC), DirArray(IC), xx, yy, zz)
-								Call writeRtn(xx, yy, zz, SoeSta, SoeOff, SoeElv, GP3Cnt)
-								GP3Cnt = GP3Cnt + 1
-							ElseIf IC < TotElem And StaArray(IC, 3) <= SoeSta Then 
-								IC = IC + 1
-								GoTo 200
-							ElseIf IC >= TotElem And StaArray(IC, 3) <= SoeSta Then 
-								IC = Cnt
-							End If
-						ElseIf ElemArray(IC) = "L" Then 
-							StaDist = StaArray(IC, 2) - SoeSta
-							If StaArray(IC, 2) > SoeSta Or System.Math.Abs(StaDist) <= 1 Then
-								If SoeOff = 0 Then
-									CenterElev = SoeElv
-									Call lineStat(XArray(IC, 1), XArray(IC, 2), YArray(IC, 1), YArray(IC, 2), StaArray(IC, 1), SoeSta, xs, ys)
-								End If
-								Call xyzCoord(xs, ys, CenterElev, XArray(IC, 1), YArray(IC, 1), XArray(IC, 2), YArray(IC, 2), SoeOff, SoeElv, ElemArray(IC), DirArray(IC), xx, yy, zz)
-								Call writeRtn(xx, yy, zz, SoeSta, SoeOff, SoeElv, GP3Cnt)
-								GP3Cnt = GP3Cnt + 1
-							ElseIf IC < TotElem And StaArray(IC, 2) <= SoeSta Then 
-								IC = IC + 1
-								GoTo 200
-							ElseIf IC >= TotElem And StaArray(IC, 2) <= SoeSta Then 
-								IC = Cnt
-							End If
-						End If
-					End If
-				End While
-			End If
-		Next Cnt
-		
-		txtBegAlign.Visible = False
-		lblBegAlign.Visible = False
-		txtGP3Cnt.Visible = False
-		lblGP3Cnt.Visible = False
-		cmdProcess.Visible = False
-		
-		cmdNewAlign.Visible = True
-		cmdAdd.Visible = True
-		cmdReplace.Visible = True
-		cmdDelete.Visible = True
-		cmdSave.Visible = True
-		cmdCancel.Visible = True
-		cmdQuit.Visible = True
-		txtDescription.Visible = True
-		txtAlignment.Visible = True
-		txtStation.Visible = True
-		txtDescription.Enabled = True
-		txtAlignment.Enabled = True
-		txtStation.Enabled = True
-		txtPnt1.Visible = True
-		txtPnt2.Visible = True
-		txtPnt3.Visible = True
-		txtPnt4.Visible = True
-		lblDesc.Visible = True
-		lblAlign.Visible = True
-		lblStation.Visible = True
-		lblPnt1.Visible = True
-		lblPnt2.Visible = True
-		lblPnt3.Visible = True
-		lblPnt4.Visible = True
-		lstSASData.Visible = True
-		frameType.Visible = True
-		
-		FileClose(6)
-		FileClose(10)
-		FileClose(14)
-	End Sub
-	
-	'UPGRADE_WARNING: Event optType.CheckedChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-	Private Sub optType_CheckedChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles optType.CheckedChanged
-		If eventSender.Checked Then
-			Dim Index As Short = optType.GetIndex(eventSender)
-			Select Case Index
-				Case 0
-					cmdNewAlign.Visible = True
-					
-					lblAlign.Visible = True
-					lblDesc.Visible = True
-					lblStation.Visible = True
-					lblUnits.Visible = True
-					comboUnits.Visible = True
-					
-					txtDescription.Visible = True
-					txtAlignment.Visible = True
-					txtStation.Visible = True
-					txtDescription.Enabled = True
-					txtAlignment.Enabled = True
-					txtStation.Enabled = True
-					
-					txtDescription.SetFocus()
-					
-					txtPnt1.Visible = False
-					txtPnt2.Visible = False
-					txtPnt3.Visible = False
-					txtPnt4.Visible = False
-					lblPnt1.Visible = False
-					lblPnt2.Visible = False
-					lblPnt3.Visible = False
-					lblPnt4.Visible = False
-					
-					frameCurve.Visible = False
-					optCurve(0).Visible = False
-					optCurve(1).Visible = False
-					optCurve(2).Visible = False
-				Case 1
-					
-					txtDescription.Enabled = False
-					txtAlignment.Enabled = False
-					txtStation.Enabled = False
-					
-					lblPnt1.Caption = "Beg Pnt"
-					lblPnt2.Caption = "End Pnt"
-					txtPnt1.Visible = True
-					txtPnt2.Visible = True
-					txtPnt3.Visible = False
-					txtPnt4.Visible = False
-					lblPnt1.Visible = True
-					lblPnt2.Visible = True
-					lblPnt3.Visible = False
-					lblPnt4.Visible = False
-					
-					txtPnt1.SetFocus()
-					
-					frameCurve.Visible = False
-					optCurve(0).Visible = False
-					optCurve(1).Visible = False
-					optCurve(2).Visible = False
-				Case 2
-					
-					txtDescription.Enabled = False
-					txtAlignment.Enabled = False
-					txtStation.Enabled = False
-					
-					txtPnt1.Visible = False
-					txtPnt2.Visible = False
-					txtPnt3.Visible = False
-					txtPnt4.Visible = False
-					lblPnt1.Visible = False
-					lblPnt2.Visible = False
-					lblPnt3.Visible = False
-					lblPnt4.Visible = False
-					frameCurve.Visible = True
-					optCurve(0).Checked = False
-					optCurve(1).Checked = False
-					optCurve(2).Checked = False
-					optCurve(0).Visible = True
-					optCurve(1).Visible = True
-					optCurve(2).Visible = True
-			End Select
-		End If
-	End Sub
-	
-	'UPGRADE_WARNING: Event optCurve.CheckedChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
-	Private Sub optCurve_CheckedChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles optCurve.CheckedChanged
-		If eventSender.Checked Then
-			Dim Index As Short = optCurve.GetIndex(eventSender)
-			txtPnt1.Text = ""
-			txtPnt2.Text = ""
-			txtPnt3.Text = ""
-			txtPnt4.Text = ""
-			Select Case Index
-				Case 0
-					lblPnt1.Caption = "PC"
-					lblPnt2.Caption = "PI"
-					lblPnt3.Caption = "PT"
-					txtPnt1.Visible = True
-					txtPnt2.Visible = True
-					txtPnt3.Visible = True
-					txtPnt4.Visible = False
-					lblPnt1.Visible = True
-					lblPnt2.Visible = True
-					lblPnt3.Visible = True
-					lblPnt4.Visible = False
-				Case 1
-					lblPnt1.Caption = "PC"
-					lblPnt2.Caption = "POC"
-					lblPnt3.Caption = "PT"
-					txtPnt1.Visible = True
-					txtPnt2.Visible = True
-					txtPnt3.Visible = True
-					txtPnt4.Visible = False
-					lblPnt1.Visible = True
-					lblPnt2.Visible = True
-					lblPnt3.Visible = True
-					lblPnt4.Visible = False
-				Case 2
-					lblPnt1.Caption = "PC"
-					lblPnt2.Caption = "POST1"
-					lblPnt3.Caption = "POST2"
-					lblPnt4.Caption = "PT"
-					txtPnt1.Visible = True
-					txtPnt2.Visible = True
-					txtPnt3.Visible = True
-					txtPnt4.Visible = True
-					lblPnt1.Visible = True
-					lblPnt2.Visible = True
-					lblPnt3.Visible = True
-					lblPnt4.Visible = True
-			End Select
-		End If
-	End Sub
-	
-	
-	Public Sub mnuSasPrint_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuSasPrint.Click
-		Dim Printer As New Printer
-		
-		Msg = "Continue Printing"
-		Style = CStr(MsgBoxStyle.YesNo)
-		Title = "Print Proc"
-		Response = CStr(MsgBox(Msg, CDbl(Style), Title))
-		
-		FileOpen(6, SasRpt_filename, OpenMode.Input)
-		
-		If Response = CStr(MsgBoxResult.No) Then
-			Printer.KillDoc() ' Terminate print job abruptly.
-			Printer.EndDoc()
-		Else
-			If Response = CStr(MsgBoxResult.Yes) Then
-				Printer.Orientation = 1 ' Portrait orientation
-				Printer.FontSize = 10
-				'UPGRADE_ISSUE: Screen property Screen.Fonts was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				Printer.FontName = Screen.Fonts(12)
-				Printer.FontSize = 10
-				Page = 1
-				Call Header(Page)
-				
-				IRow = 9
-				xyzSwitch = "N"
-				While Not EOF(6)
-					Input(6, F1)
-					Input(6, F2)
-					Input(6, F3)
-					Input(6, F4)
-					Input(6, F5)
-					Input(6, F6)
-					IRow = IRow + 1
-					If IRow > 60 Then
-						IRow = 9
-						Printer.NewPage()
-						Page = Page + 1
-						Call Header(Page)
-						If xyzSwitch = "Y" Then
-							F1a = "X Coord"
-							F2a = "Y Coord"
-							F3a = "Z Coord"
-							F4a = "Station"
-							F5a = "Offset"
-							F6a = "Elevation"
-							Printer.Print(F1a, F2a, F3a, F4a, F5a, F6a)
-						End If
-					ElseIf F1 = "LINE ELEMENT" And IRow > 54 Then 
-						IRow = 9
-						Printer.NewPage()
-						Page = Page + 1
-						Call Header(Page)
-					ElseIf F1 = "CURVE ELEMENT" And IRow > 47 Then 
-						IRow = 9
-						Printer.NewPage()
-						Page = Page + 1
-						Call Header(Page)
-					ElseIf F1 = "XYZ Conversion Report" Then 
-						xyzSwitch = "Y"
-					End If
-					Printer.Print(F1, F2, F3, F4, F5, F6)
-				End While
-				
-				Printer.EndDoc()
-				Msg = "Finished SAS Print"
-				Style = CStr(MsgBoxStyle.OKOnly)
-				Title = "Print Proc"
-				Response = CStr(MsgBox(Msg, CDbl(Style), Title))
-			End If
-		End If
-	End Sub
-	Private Sub Header(ByRef Page As Object)
-		Dim Printer As New Printer
-		
-		MyDate = "Date:" & Now
-		'UPGRADE_WARNING: Couldn't resolve default property of object Page. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		MyPage = "Page:" & Page
-		Printer.Print("                                                                                " & MyPage)
-		Printer.FontBold = True
-		Printer.Print("")
-		Printer.Print("                            SOUTH CAROLINA DEPARTMENT OF TRANSPORTATION")
-		Printer.Print("")
-		Printer.Print("                                     SURVEY AUTOMATION SYSTEM")
-		Printer.Print("")
-		Printer.Print("                         VERSION:WIN/NT 2.0                         " & MyDate)
-		Printer.Print("")
-		Printer.FontBold = False
-		Printer.Print("====================================================================================================")
-	End Sub
 
-    Private Sub lstSASData_SelectedIndexChanged_1(sender As System.Object, e As System.EventArgs) Handles lstSASData.SelectedIndexChanged
-        cmdReplace.Visible = True
-        cmdAdd.Visible = False
-        cmdReplace.Default = True
-
-        sList = lstSASData.List(lstSASData.ListIndex)
-        lstIndex = lstSASData.ListIndex
-        Pos1 = InStr(1, sList, "* ", 0)
-
-        RecType = Mid(sList, 1, (Pos1 - 1))
-        If RecType = "D" Then
-            optType1 = True
-
-            Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
-            Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
-            Pos4 = InStr(Pos3 + 2, sList, "* ", 0)
-            Pos5 = InStr(Pos4 + 2, sList, "*", 0)
-            txtDescription = Mid(sList, Pos1 + 2, (Pos2 - Pos1 - 2))
-            txtAlignment = Mid(sList, Pos2 + 2, (Pos3 - Pos2 - 2))
-            txtStation = Mid(sList, Pos3 + 2, (Pos4 - Pos3 - 2))
-            comboUnits = Mid(sList, Pos4 + 2, (Pos5 - Pos4 - 2))
-            txtDescription.Enabled = True
-            txtAlignment.Enabled = True
-            txtStation.Enabled = True
-            comboUnits.Enabled = True
-            If txtPnt1.Visible = True Then
-                txtPnt1.Visible = False
-                txtPnt2.Visible = False
-                txtPnt3.Visible = False
-                txtPnt4.Visible = False
-                lblPnt1.Visible = False
-                lblPnt2.Visible = False
-                lblPnt3.Visible = False
-                lblPnt4.Visible = False
-            End If
-        ElseIf RecType = "L" Then
-            optType2 = True
-
-            txtDescription.Enabled = False
-            txtAlignment.Enabled = False
-            txtStation.Enabled = False
-            comboUnits.Enabled = False
-
-            lblPnt1.Caption = "Beg Pnt"
-            lblPnt2.Caption = "End Pnt"
-            txtPnt1.Visible = True
-            txtPnt2.Visible = True
-            txtPnt3.Visible = False
-            txtPnt4.Visible = False
-            lblPnt1.Visible = True
-            lblPnt2.Visible = True
-            lblPnt3.Visible = False
-            lblPnt4.Visible = False
-
-            frameCurve.Visible = False
-            optCurve1.Visible = False
-            optCurve2.Visible = False
-            optCurve3.Visible = False
-
-            Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
-            Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
-            txtPnt1 = Mid(sList, Pos1 + 2, (Pos2 - Pos1 - 2))
-            txtPnt2 = Mid(sList, Pos2 + 2, (Pos3 - Pos2 - 2))
-        ElseIf Mid(RecType, 1, 1) = "C" Then
-            optType3 = True
-            If Mid(RecType, 2, 1) = "0" Then
-                optCurve1 = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "PI"
-                lblPnt3.Caption = "PT"
-                txtPnt1.Visible = True
-                txtPnt2.Visible = True
-                txtPnt3.Visible = True
-                txtPnt4.Visible = False
-                lblPnt1.Visible = True
-                lblPnt2.Visible = True
-                lblPnt3.Visible = True
-                lblPnt4.Visible = False
-            ElseIf Mid(RecType, 2, 1) = "1" Then
-                optCurve2 = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "POC"
-                lblPnt3.Caption = "PT"
-                txtPnt1.Visible = True
-                txtPnt2.Visible = True
-                txtPnt3.Visible = True
-                txtPnt4.Visible = False
-                lblPnt1.Visible = True
-                lblPnt2.Visible = True
-                lblPnt3.Visible = True
-                lblPnt4.Visible = False
-            ElseIf Mid(RecType, 2, 1) = "2" Then
-                optCurve3 = True
-                lblPnt1.Caption = "PC"
-                lblPnt2.Caption = "POST"
-                lblPnt3.Caption = "POST"
-                lblPnt4.Caption = "PT"
-                txtPnt1.Visible = True
-                txtPnt2.Visible = True
-                txtPnt3.Visible = True
-                txtPnt4.Visible = True
-                lblPnt1.Visible = True
-                lblPnt2.Visible = True
-                lblPnt3.Visible = True
-                lblPnt4.Visible = True
-            End If
-
-            Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
-            Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
-            Pos4 = InStr(Pos3 + 2, sList, "* ", 0)
-            Pos5 = InStr(Pos4 + 2, sList, "*", 0)
-            txtPnt1 = Mid(sList, Pos1 + 2, (Pos2 - Pos1 - 2))
-            txtPnt2 = Mid(sList, Pos2 + 2, (Pos3 - Pos2 - 2))
-            txtPnt3 = Mid(sList, Pos3 + 2, (Pos4 - Pos3 - 2))
-            txtPnt4 = Mid(sList, Pos4 + 2, (Pos5 - Pos4 - 2))
-        End If
-    End Sub
-
-    Private Sub Button7_Click(sender As System.Object, e As System.EventArgs) Handles Button7.Click
+    Private Sub cmdProcess_Click()
         '
-   Open SasRpt_filename For Append As #6
-   Open XYZ_filename For Output As #7
-   Open GP3_filename For Output As #20
+        FileOpen(6, SasRpt_Filename, OpenMode.Append)
+        FileOpen(7, XYZ_Filename, OpenMode.Output)
+        FileOpen(20, GP3_Filename, OpenMode.Output)
         '
-   Open SO1_filename For Output As #10
-   Open SOR_filename For Input As #14
+        FileOpen(10, SO1_Filename, OpenMode.Output)
+        FileOpen(14, SOR_Filename, OpenMode.Input)
 
-   Write #6, "", "", "", "", "", ""
-   Write #6, "", "", "", "", "", ""
-   Write #6, "XYZ Conversion Report", "", "", "", "", ""
-   Write #6, "X Coord", "Y Coord", "Z Coord", "Station", "Offset", "Elevation "
+        WriteLine(6, "", "", "", "", "", "")
+        WriteLine(6, "", "", "", "", "", "")
+        WriteLine(6, "XYZ Conversion Report", "", "", "", "", "")
+        WriteLine(6, "X Coord", "Y Coord", "Z Coord", "Station", "Offset", "Elevation ")
 
-        If txtGP3Cnt = "" Then
+        If txtGP3Cnt.Text = "" Then
             GP3Cnt = 1000
         Else
-            GP3Cnt = Val(txtGP3Cnt)
+            GP3Cnt = Val(txtGP3Cnt.Text)
         End If
         For Cnt = 1 To TotElem
-            If Val(txtBegAlign) = AlignArray(Cnt) Then
+            If Val(txtBegAlign.Text) = AlignArray(Cnt) Then
                 IC = Cnt
                 While Not EOF(14)
-            Line Input #14, Record
+                    Record = LineInput(14)
                     If Mid(Record, 1, 1) <> "*" Then
                         '
                         Pos1 = InStr(1, Record, ",", 0)
@@ -1262,23 +773,20 @@ Friend Class frmSasInp
                         Pos3 = InStr(Pos2 + 1, Record, ",", 0)
                         Pos4 = InStr(Pos3 + 1, Record, ",", 0)
 
-                        SoePnt = Mid(Record, 1, Pos1 - 1)
-                        SoeSta = Mid(Record, Pos1 + 1, Pos2 - Pos1 - 1)
-                        SoeOff = Mid(Record, Pos2 + 1, Pos3 - Pos2 - 1)
-                        SoeElv = Mid(Record, Pos3 + 1, Pos4 - Pos3 - 1)
+                        SoePnt = CShort(Mid(Record, 1, Pos1 - 1))
+                        SoeSta = CDbl(Mid(Record, Pos1 + 1, Pos2 - Pos1 - 1))
+                        SoeOff = CDbl(Mid(Record, Pos2 + 1, Pos3 - Pos2 - 1))
+                        SoeElv = CDbl(Mid(Record, Pos3 + 1, Pos4 - Pos3 - 1))
                         SoeDesc = Mid(Record, Pos4 + 1, Len(Record) - Pos4)
                         '
 200:                    If ElemArray(IC) = "C" Then
                             StaDist = StaArray(IC, 3) - SoeSta
-                            If StaArray(IC, 3) > SoeSta Or Abs(StaDist) <= 1 Then
+                            If StaArray(IC, 3) > SoeSta Or System.Math.Abs(StaDist) <= 1 Then
                                 If SoeOff = 0 Then
                                     CenterElev = SoeElv
-                                    Call curveStat(CArray(IC, 1), CArray(IC, 2), XArray(IC, 1), YArray(IC, 1), _
-                                       StaArray(IC, 1), SoeSta, DirArray(IC), CArray(IC, 3), xc, yc)
+                                    Call curveStat(CArray(IC, 1), CArray(IC, 2), XArray(IC, 1), YArray(IC, 1), StaArray(IC, 1), SoeSta, DirArray(IC), CArray(IC, 3), xc, yc)
                                 End If
-                                Call xyzCoord(xc, yc, CenterElev, CArray(IC, 1), CArray(IC, 2), _
-                                   XArray(IC, 2), YArray(IC, 2), offset, elev, ElemArray(IC), _
-                                   DirArray(IC), xx, yy, zz)
+                                Call xyzCoord(xc, yc, CenterElev, CArray(IC, 1), CArray(IC, 2), XArray(IC, 2), YArray(IC, 2), offset, elev, ElemArray(IC), DirArray(IC), xx, yy, zz)
                                 Call writeRtn(xx, yy, zz, SoeSta, SoeOff, SoeElv, GP3Cnt)
                                 GP3Cnt = GP3Cnt + 1
                             ElseIf IC < TotElem And StaArray(IC, 3) <= SoeSta Then
@@ -1289,15 +797,12 @@ Friend Class frmSasInp
                             End If
                         ElseIf ElemArray(IC) = "L" Then
                             StaDist = StaArray(IC, 2) - SoeSta
-                            If StaArray(IC, 2) > SoeSta Or Abs(StaDist) <= 1 Then
+                            If StaArray(IC, 2) > SoeSta Or System.Math.Abs(StaDist) <= 1 Then
                                 If SoeOff = 0 Then
                                     CenterElev = SoeElv
-                                    Call lineStat(XArray(IC, 1), XArray(IC, 2), YArray(IC, 1), YArray(IC, 2), _
-                                       StaArray(IC, 1), SoeSta, xs, ys)
+                                    Call lineStat(XArray(IC, 1), XArray(IC, 2), YArray(IC, 1), YArray(IC, 2), StaArray(IC, 1), SoeSta, xs, ys)
                                 End If
-                                Call xyzCoord(xs, ys, CenterElev, XArray(IC, 1), YArray(IC, 1), _
-                                   XArray(IC, 2), YArray(IC, 2), SoeOff, SoeElv, ElemArray(IC), _
-                                   DirArray(IC), xx, yy, zz)
+                                Call xyzCoord(xs, ys, CenterElev, XArray(IC, 1), YArray(IC, 1), XArray(IC, 2), YArray(IC, 2), SoeOff, SoeElv, ElemArray(IC), DirArray(IC), xx, yy, zz)
                                 Call writeRtn(xx, yy, zz, SoeSta, SoeOff, SoeElv, GP3Cnt)
                                 GP3Cnt = GP3Cnt + 1
                             ElseIf IC < TotElem And StaArray(IC, 2) <= SoeSta Then
@@ -1342,11 +847,356 @@ Friend Class frmSasInp
         lblPnt2.Visible = True
         lblPnt3.Visible = True
         lblPnt4.Visible = True
-        lstSASData.Visible = True
-        frameType.Visible = True
+        lstSAS_Data.Visible = True
+        optType.Visible = True
 
-   Close #6
-   Close #10
-   Close #14
+        FileClose(6)
+        FileClose(10)
+        FileClose(14)
+    End Sub
+
+    Public Sub mnuSasPrint_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuSasPrint.Click
+        Dim Printer As New Printer
+        Dim Font As New Font("Currier New", 10)
+
+        Msg = "Continue Printing"
+        Style = CStr(MsgBoxStyle.YesNo)
+        Title = "Print Proc"
+        Response = CStr(MsgBox(Msg, CDbl(Style), Title))
+
+        FileOpen(6, SasRpt_Filename, OpenMode.Input)
+
+        If Response = CStr(MsgBoxResult.No) Then
+            Printer.KillDoc() ' Terminate print job abruptly.
+            Printer.EndDoc()
+        Else
+            If Response = CStr(MsgBoxResult.Yes) Then
+                Printer.Orientation = 1 ' Portrait orientation
+                Printer.Font = Font
+                Page = 1
+                Call Header(Page)
+
+                IRow = 9
+                xyzSwitch = "N"
+                While Not EOF(6)
+                    Input(6, F1)
+                    Input(6, F2)
+                    Input(6, F3)
+                    Input(6, F4)
+                    Input(6, F5)
+                    Input(6, F6)
+                    IRow = IRow + 1
+                    If IRow > 60 Then
+                        IRow = 9
+                        Printer.NewPage()
+                        Page = Page + 1
+                        Call Header(Page)
+                        If xyzSwitch = "Y" Then
+                            F1a = "X Coord"
+                            F2a = "Y Coord"
+                            F3a = "Z Coord"
+                            F4a = "Station"
+                            F5a = "Offset"
+                            F6a = "Elevation"
+                            WriteLine(12, F1a, F2a, F3a, F4a, F5a, F6a)
+                        End If
+                    ElseIf F1 = "LINE ELEMENT" And IRow > 54 Then
+                        IRow = 9
+                        Printer.NewPage()
+                        Page = Page + 1
+                        Call Header(Page)
+                    ElseIf F1 = "CURVE ELEMENT" And IRow > 47 Then
+                        IRow = 9
+                        Printer.NewPage()
+                        Page = Page + 1
+                        Call Header(Page)
+                    ElseIf F1 = "XYZ Conversion Report" Then
+                        xyzSwitch = "Y"
+                    End If
+                    WriteLine(12, F1, F2, F3, F4, F5, F6)
+                End While
+
+                Printer.EndDoc()
+                Msg = "Finished SAS Print"
+                Style = CStr(MsgBoxStyle.OkOnly)
+                Title = "Print Proc"
+                Response = CStr(MsgBox(Msg, CDbl(Style), Title))
+            End If
+        End If
+    End Sub
+
+    Private Sub Header(Page)
+        Dim Printer As New Printer
+
+        MyDate = "Date:" & Now
+        MyPage = "Page:" & Page
+        WriteLine(12, "                                                                                " & MyPage)
+        WriteLine(12, "")
+        WriteLine(12, "                            SOUTH CAROLINA DEPARTMENT OF TRANSPORTATION")
+        WriteLine(12, "")
+        WriteLine(12, "                                     SURVEY AUTOMATION SYSTEM")
+        WriteLine(12, "")
+        WriteLine(12, "                         VERSION:WIN/NT 2.0                         " & MyDate)
+        WriteLine(12, "")
+        WriteLine(12, "====================================================================================================")
+    End Sub
+
+    Private Sub optType1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optType1.CheckedChanged
+        txtPnt1.Text = ""
+        txtPnt2.Text = ""
+        txtPnt3.Text = ""
+        txtPnt4.Text = ""
+        lblPnt1.Text = "PC"
+        lblPnt2.Text = "PI"
+        lblPnt3.Text = "PT"
+        txtPnt1.Visible = True
+        txtPnt2.Visible = True
+        txtPnt3.Visible = True
+        txtPnt4.Visible = False
+        lblPnt1.Visible = True
+        lblPnt2.Visible = True
+        lblPnt3.Visible = True
+        lblPnt4.Visible = False
+    End Sub
+
+    Private Sub optType2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optType2.CheckedChanged
+        txtPnt1.Text = ""
+        txtPnt2.Text = ""
+        txtPnt3.Text = ""
+        txtPnt4.Text = ""
+        lblPnt1.Text = "PC"
+        lblPnt2.Text = "POC"
+        lblPnt3.Text = "PT"
+        txtPnt1.Visible = True
+        txtPnt2.Visible = True
+        txtPnt3.Visible = True
+        txtPnt4.Visible = False
+        lblPnt1.Visible = True
+        lblPnt2.Visible = True
+        lblPnt3.Visible = True
+        lblPnt4.Visible = False
+    End Sub
+
+    Private Sub optType3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optType3.CheckedChanged
+        txtPnt1.Text = ""
+        txtPnt2.Text = ""
+        txtPnt3.Text = ""
+        txtPnt4.Text = ""
+        lblPnt1.Text = "PC"
+        lblPnt2.Text = "POST1"
+        lblPnt3.Text = "POST2"
+        lblPnt4.Text = "PT"
+        txtPnt1.Visible = True
+        txtPnt2.Visible = True
+        txtPnt3.Visible = True
+        txtPnt4.Visible = True
+        lblPnt1.Visible = True
+        lblPnt2.Visible = True
+        lblPnt3.Visible = True
+        lblPnt4.Visible = True
+    End Sub
+
+    Private Sub optCurve1_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optCurve1.CheckedChanged
+        Focus_Flag = "N"
+        RecType = "C0"
+        Call Curve_Pnt_Proc(3)
+
+        If RC = "Y" Then
+            txtPnt1.Visible = False
+            txtPnt2.Visible = False
+            txtPnt3.Visible = False
+            txtPnt4.Visible = False
+            lblPnt1.Visible = False
+            lblPnt2.Visible = False
+            lblPnt3.Visible = False
+            lblPnt4.Visible = False
+
+            optCurve.Visible = False
+            optCurve1.AutoCheck = False
+            optCurve2.AutoCheck = False
+            optCurve3.AutoCheck = False
+            optCurve1.Visible = False
+            optCurve2.Visible = False
+            optCurve3.Visible = False
+        End If
+    End Sub
+
+    Private Sub optCurve2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optCurve1.CheckedChanged
+        Focus_Flag = "N"
+        RecType = "C1"
+        Call Curve_Pnt_Proc(3)
+
+        If RC = "Y" Then
+            txtPnt1.Visible = False
+            txtPnt2.Visible = False
+            txtPnt3.Visible = False
+            txtPnt4.Visible = False
+            lblPnt1.Visible = False
+            lblPnt2.Visible = False
+            lblPnt3.Visible = False
+            lblPnt4.Visible = False
+
+            optCurve.Visible = False
+            optCurve1.AutoCheck = False
+            optCurve2.AutoCheck = False
+            optCurve3.AutoCheck = False
+            optCurve1.Visible = False
+            optCurve2.Visible = False
+            optCurve3.Visible = False
+        End If
+
+    End Sub
+    Private Sub optCurve3_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles optCurve1.CheckedChanged
+        Focus_Flag = "N"
+        RecType = "C2"
+        Call Curve_Pnt_Proc(4)
+
+        If RC = "Y" Then
+            txtPnt1.Visible = False
+            txtPnt2.Visible = False
+            txtPnt3.Visible = False
+            txtPnt4.Visible = False
+            lblPnt1.Visible = False
+            lblPnt2.Visible = False
+            lblPnt3.Visible = False
+            lblPnt4.Visible = False
+
+            optCurve.Visible = False
+            optCurve1.AutoCheck = False
+            optCurve2.AutoCheck = False
+            optCurve3.AutoCheck = False
+            optCurve1.Visible = False
+            optCurve2.Visible = False
+            optCurve3.Visible = False
+        End If
+    End Sub
+
+    Private Sub Curve_Pnt_Proc(numPnt As Integer)
+        Col1 = txtPnt1.Text
+        Call Point_Check(Val(Col1), RC, idx_Pnt(numPnt), idxCnt)
+        If RC = "N" Then
+            txtPnt1.Text = ""
+            txtPnt1.Focus()
+            Focus_Flag = "Y"
+        End If
+        Col2 = txtPnt2.Text
+        Call Point_Check(Val(Col2), RC, idx_Pnt(numPnt), idxCnt)
+        If RC = "N" Then
+            txtPnt2.Text = ""
+            If Focus_Flag = "N" Then
+                txtPnt2.Focus()
+                Focus_Flag = "Y"
+            End If
+        End If
+        Col3 = txtPnt3.Text
+        Call Point_Check(Val(Col3), RC, idx_Pnt(numPnt), idxCnt)
+        If RC = "N" Then
+            txtPnt3.Text = ""
+            If Focus_Flag = "N" Then
+                txtPnt3.Focus()
+                Focus_Flag = "Y"
+            End If
+        End If
+        If numPnt = 4 Then
+            Col4 = txtPnt4.Text
+            Call Point_Check(Val(Col4), RC, idx_Pnt, idxCnt)
+            If RC = "N" Then
+                txtPnt4.Text = ""
+                If Focus_Flag = "N" Then
+                    txtPnt4.Focus()
+                    Focus_Flag = "Y"
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub cmdCancel_Click(sender As System.Object, e As System.EventArgs) Handles cmdCancel.Click
+        If optType1.AutoCheck = True Then
+            txtDescription.Text = ""
+            txtAlignment.Text = ""
+            txtStation.Text = ""
+            txtDescription.Focus()
+        ElseIf optType2.AutoCheck = True Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            txtPnt1.Focus()
+        ElseIf optType3.AutoCheck = True Then
+            txtPnt1.Text = ""
+            txtPnt2.Text = ""
+            txtPnt3.Text = ""
+            txtPnt4.Text = ""
+            txtPnt1.Focus()
+        End If
+        cmdAdd.Visible = True
+        cmdReplace.Visible = False
+    End Sub
+
+    Private Sub cmdDelete_Click(sender As System.Object, e As System.EventArgs) Handles cmdDelete.Click
+        lstSAS_Data.Items.Remove(lstSAS_Data.SelectedItem)
+        lstSAS_Data.Refresh()
+    End Sub
+
+    Private Sub cmdQuit_Click(sender As System.Object, e As System.EventArgs) Handles cmdQuit.Click
+        FileClose(2)
+        FileClose(4)
+        FileClose(5)
+        FileClose(6)
+        FileClose(7)
+        FileClose(11)
+        FileClose(20)
+        If Save_Flag = "Y" Then
+            Call cmdSave_Click()
+        End If
+        Dispose()
+    End Sub
+
+    Private Sub ReformData(sList As IList, RecType As String, Col1 As String, Col2 As String, Col3 As String, Col4 As String)
+        Pos1 = InStr(1, sList, "* ", 0)
+        Pos2 = InStr(Pos1 + 2, sList, "* ", 0)
+        Pos3 = InStr(Pos2 + 2, sList, "* ", 0)
+        Pos4 = InStr(Pos3 + 2, sList, "* ", 0)
+        Pos5 = InStr(Pos4 + 2, sList, "*", 0)
+
+        RecType = Mid(sList, 1, (Pos1 - 1))
+        Col1 = Mid(sList, Pos1 + 2, (Pos2 - Pos1 - 2))
+        Col2 = Mid(sList, Pos2 + 2, (Pos3 - Pos2 - 2))
+        Col3 = Mid(sList, Pos3 + 2, (Pos4 - Pos3 - 2))
+        Col4 = Mid(sList, Pos4 + 2, (Pos5 - Pos4 - 2))
+    End Sub
+
+    Private Sub cmdSave_Click(sender As System.Object, e As System.EventArgs) Handles cmdSave.Click
+        Dim I As Integer
+        FileOpen(30, "tmp.dat", OpenMode.Output)
+        For I = 0 To lstSAS_Data.Items.Count - 1
+            sList = lstSAS_Data.SelectedItem(I)
+            Call ReformData(sList, RecType, Col1, Col2, Col3, Col4)
+            Write(30, RecType, Col1, Col2, Col3, Col4)
+        Next I
+
+        FileClose(30)
+
+        FileOpen(1, Alg_Filename, OpenMode.Output)
+        FileOpen(30, "tmp.dat", OpenMode.Input)
+        Input(30, RecType)
+        Input(30, Col1)
+        Input(30, Col2)
+        Input(30, Col3)
+        Input(30, Col4)
+        While Not EOF(30)
+            Write(1, RecType, Col1, Col2, Col3, Col4)
+            Input(30, RecType)
+            Input(30, Col1)
+            Input(30, Col2)
+            Input(30, Col3)
+            Input(30, Col4)
+        End While
+        ' write last record...
+        Write(1, RecType, Col1, Col2, Col3, Col4)
+        FileClose(1)
+        FileClose(30)
+        Kill("\tmp.dat")
+        Save_Flag = "N"
     End Sub
 End Class

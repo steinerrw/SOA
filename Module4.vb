@@ -4,8 +4,8 @@ Module Soa
 
     Public Sub CreateMap()
 
-        FileOpen(2, New_filename, OpenMode.Append)
-        FileOpen(3, Map_filename, OpenMode.Output)
+        FileOpen(2, New_Filename, OpenMode.Append)
+        FileOpen(3, Map_Filename, OpenMode.Output)
         MySize = LOF(2)
         FileClose(2)
         If MySize = 0 Then
@@ -13,9 +13,9 @@ Module Soa
             Style = CStr(MsgBoxResult.Ok)
             Title = "Critical Error"
             Response = CStr(MsgBox(Msg, CDbl(Style), Title))
-            frmSoaInp.Close()
+            '            frmSoaInp.FileClose()
         Else
-            FileOpen(2, New_filename, OpenMode.Input)
+            FileOpen(2, New_Filename, OpenMode.Input)
             Record = LineInput(2)
 
             While Not EOF(2)
@@ -26,7 +26,7 @@ Module Soa
                     iZ = CDbl(Str(CDbl(Mid(Record, 35, 13))))
                     Desc = Mid(Record, 49, 20)
 
-                    'write  #3 .map file
+                    'write  #3 .map File
                     If Mid(Desc, 1, 2) = "CL" Or Mid(Desc, 1, 3) = "X" Then
                     Else
                         WriteLine(3, Pnt, iX, iY, iZ, Desc)
@@ -42,13 +42,13 @@ Module Soa
                 iZ = CDbl(Str(CDbl(Mid(Record, 35, 13))))
                 Desc = Mid(Record, 49, 20)
 
-                'write  #3 .map file
+                'write  #3 .map File
                 If Mid(Desc, 1, 2) = "CL" Or Mid(Desc, 1, 3) = "X" Then
                 Else
                     WriteLine(3, Pnt, iX, iY, iZ, Desc)
                 End If
             End If
-            Msg = "Map file created"
+            Msg = "Map File created"
             Style = CStr(MsgBoxResult.Ok)
             Title = "Create Map"
             Response = CStr(MsgBox(Msg, CDbl(Style), Title))
@@ -65,7 +65,7 @@ Module Soa
             idx_Y(idxCnt) = 0
             idx_Z(idxCnt) = 0
         Next I
-        FileOpen(2, New_filename, OpenMode.Input)
+        FileOpen(2, New_Filename, OpenMode.Input)
         Record = LineInput(2)
         While Not EOF(2)
             If Mid(Record, 1, 1) <> "*" Then
@@ -75,7 +75,7 @@ Module Soa
                 iX = CDbl(Str(CDbl(Mid(Record, 21, 13))))
                 iZ = CDbl(Str(CDbl(Mid(Record, 35, 13))))
 
-                'load array from .pnt file
+                'load array from .pnt File
                 If Mid(Record, 49, 3) = "POT" Or Mid(Record, 49, 4) = "POST" Or Mid(Record, 49, 2) = "PC" Or Mid(Record, 49, 3) = "POC" Or Mid(Record, 49, 2) = "PI" Or Mid(Record, 49, 2) = "PT" Or Mid(Record, 49, 2) = "RP" Or Mid(Record, 49, 3) = "PRC" Or Mid(Record, 49, 2) = "CP" Or Mid(Record, 49, 2) = "BM" Or Mid(Record, 49, 3) = "ICL" Or Mid(Record, 49, 2) = "CP" Or Mid(Record, 49, 3) = "ODL" Or Mid(Record, 49, 4) = "ODLA" Or Mid(Record, 49, 4) = "ODLB" Or Mid(Record, 49, 2) = "BM" And Pnt > 0 Then
 
                     idxCnt = idxCnt + 1
@@ -117,7 +117,7 @@ Module Soa
             rejZ(I) = 0
             rejDesc(I) = ""
         Next I
-        FileOpen(11, Rej_filename, OpenMode.Input)
+        FileOpen(11, Rej_Filename, OpenMode.Input)
         Do While Not EOF(11)
             pntCnt = pntCnt + 1
             validPnt(pntCnt) = "N"
@@ -244,7 +244,7 @@ Module Soa
         theta1 = theta
         dir_Renamed = TDir
 
-        FileOpen(11, Rej_filename, OpenMode.Input)
+        FileOpen(11, Rej_Filename, OpenMode.Input)
         Do While Not EOF(11)
             pntCnt = pntCnt + 1
             validPnt(pntCnt) = "N"
@@ -347,11 +347,11 @@ Module Soa
 
     Public Sub Output()
 
-        FileOpen(12, Vld_filename, OpenMode.Input)
-        FileOpen(24, Rt_filename, OpenMode.Output)
-        FileOpen(25, Lt_filename, OpenMode.Output)
+        FileOpen(12, Vld_Filename, OpenMode.Input)
+        FileOpen(24, Rt_Filename, OpenMode.Output)
+        FileOpen(25, Lt_Filename, OpenMode.Output)
         '
-        ' list box used to sort file by align no. station then offset.
+        ' list box used to sort File by align no. station then offset.
         '
         While Not EOF(12)
             Input(12, Pnt)
@@ -416,8 +416,8 @@ Module Soa
         '
         frmSoaInp.lstSoaSort.Items.Clear()
         '
-        FileOpen(24, Rt_filename, OpenMode.Input)
-        FileOpen(34, DgnRt_filename, OpenMode.Output)
+        FileOpen(24, Rt_Filename, OpenMode.Input)
+        FileOpen(34, DgnRt_Filename, OpenMode.Output)
         While Not EOF(24)
             Input(24, SoeSta)
             Input(24, SoeOff)
@@ -473,8 +473,8 @@ Module Soa
         FileClose(34)
         '
         frmSoaInp.lstSoaSort.Items.Clear()
-        FileOpen(25, Lt_filename, OpenMode.Input)
-        FileOpen(35, DgnLt_filename, OpenMode.Output)
+        FileOpen(25, Lt_Filename, OpenMode.Input)
+        FileOpen(35, DgnLt_Filename, OpenMode.Output)
         While Not EOF(25)
             Input(25, SoeSta)
             Input(25, SoeOff)
@@ -529,8 +529,8 @@ Module Soa
         Next Cnt
         FileClose(35)
         '
-        Kill(Rt_filename)
-        Kill(Lt_filename)
+        Kill(Rt_Filename)
+        Kill(Lt_Filename)
         '
         Msg = "Finished Creating DGN Files"
         Style = CStr(MsgBoxStyle.OkOnly)

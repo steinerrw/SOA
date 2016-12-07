@@ -46,37 +46,26 @@
         Me.CenterLineProcessUsingSOEFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.optType3 = New System.Windows.Forms.RadioButton()
-        Me.optType2 = New System.Windows.Forms.RadioButton()
-        Me.optType1 = New System.Windows.Forms.RadioButton()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.optCurve1 = New System.Windows.Forms.RadioButton()
-        Me.optCurve2 = New System.Windows.Forms.RadioButton()
-        Me.optCurve3 = New System.Windows.Forms.RadioButton()
-        Me.cmdSOA_Add = New System.Windows.Forms.Button()
-        Me.cmdReplace = New System.Windows.Forms.Button()
-        Me.cmdSave = New System.Windows.Forms.Button()
-        Me.cmdDelete = New System.Windows.Forms.Button()
-        Me.cmdCancel = New System.Windows.Forms.Button()
+        Me.optTypeProc7 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc6 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc5 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc4 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc3 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc2 = New System.Windows.Forms.RadioButton()
+        Me.optTypeProc1 = New System.Windows.Forms.RadioButton()
+        Me.cmdSOA_Print = New System.Windows.Forms.Button()
         Me.cmdSOA_Quit = New System.Windows.Forms.Button()
-        Me.txtBegAlign = New System.Windows.Forms.TextBox()
-        Me.txtGP3Cnt = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
-        Me.lblBegAlign = New System.Windows.Forms.Label()
-        Me.lblGP3Cnt = New System.Windows.Forms.Label()
-        Me.lblDesc = New System.Windows.Forms.Label()
-        Me.lblAlign = New System.Windows.Forms.Label()
-        Me.lblStation = New System.Windows.Forms.Label()
-        Me.lblUnits = New System.Windows.Forms.Label()
-        Me.comboUnits = New System.Windows.Forms.ComboBox()
+        Me.lblSOA_Font = New System.Windows.Forms.Label()
+        Me.lblSOA_Height = New System.Windows.Forms.Label()
+        Me.lblSOA_Width = New System.Windows.Forms.Label()
         Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
-        Me.RunAlignmentToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CenterLineProcessWithSOEFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ckhPnt = New System.Windows.Forms.CheckBox()
+        Me.lstSoa_Sort = New System.Windows.Forms.ListBox()
         Me.GroupBox1.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
         Me.MenuStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -100,266 +89,171 @@
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.optType3)
-        Me.GroupBox1.Controls.Add(Me.optType2)
-        Me.GroupBox1.Controls.Add(Me.optType1)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc7)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc6)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc5)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc4)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc3)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc2)
+        Me.GroupBox1.Controls.Add(Me.optTypeProc1)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 115)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(199, 119)
+        Me.GroupBox1.Size = New System.Drawing.Size(293, 245)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Record Type"
+        Me.GroupBox1.Text = "Type Process Options"
         '
-        'optType3
+        'optTypeProc7
         '
-        Me.optType3.AutoSize = True
-        Me.optType3.Location = New System.Drawing.Point(8, 89)
-        Me.optType3.Name = "optType3"
-        Me.optType3.Size = New System.Drawing.Size(75, 24)
-        Me.optType3.TabIndex = 2
-        Me.optType3.TabStop = True
-        Me.optType3.Text = "Curve"
-        Me.optType3.UseVisualStyleBackColor = True
+        Me.optTypeProc7.AutoSize = True
+        Me.optTypeProc7.Location = New System.Drawing.Point(8, 209)
+        Me.optTypeProc7.Name = "optTypeProc7"
+        Me.optTypeProc7.Size = New System.Drawing.Size(99, 24)
+        Me.optTypeProc7.TabIndex = 6
+        Me.optTypeProc7.TabStop = True
+        Me.optTypeProc7.Text = "Drainage"
+        Me.optTypeProc7.UseVisualStyleBackColor = True
         '
-        'optType2
+        'optTypeProc6
         '
-        Me.optType2.AutoSize = True
-        Me.optType2.Location = New System.Drawing.Point(8, 59)
-        Me.optType2.Name = "optType2"
-        Me.optType2.Size = New System.Drawing.Size(64, 24)
-        Me.optType2.TabIndex = 1
-        Me.optType2.TabStop = True
-        Me.optType2.Text = "Line"
-        Me.optType2.UseVisualStyleBackColor = True
+        Me.optTypeProc6.AutoSize = True
+        Me.optTypeProc6.Location = New System.Drawing.Point(6, 179)
+        Me.optTypeProc6.Name = "optTypeProc6"
+        Me.optTypeProc6.Size = New System.Drawing.Size(279, 24)
+        Me.optTypeProc6.TabIndex = 5
+        Me.optTypeProc6.TabStop = True
+        Me.optTypeProc6.Text = "Single Alignment w/ Station Range"
+        Me.optTypeProc6.UseVisualStyleBackColor = True
         '
-        'optType1
+        'optTypeProc5
         '
-        Me.optType1.AutoSize = True
-        Me.optType1.Location = New System.Drawing.Point(8, 29)
-        Me.optType1.Name = "optType1"
-        Me.optType1.Size = New System.Drawing.Size(114, 24)
-        Me.optType1.TabIndex = 0
-        Me.optType1.TabStop = True
-        Me.optType1.Text = "Description"
-        Me.optType1.UseVisualStyleBackColor = True
+        Me.optTypeProc5.AutoSize = True
+        Me.optTypeProc5.Location = New System.Drawing.Point(6, 149)
+        Me.optTypeProc5.Name = "optTypeProc5"
+        Me.optTypeProc5.Size = New System.Drawing.Size(264, 24)
+        Me.optTypeProc5.TabIndex = 4
+        Me.optTypeProc5.TabStop = True
+        Me.optTypeProc5.Text = "Single Alignment w/ Point Range"
+        Me.optTypeProc5.UseVisualStyleBackColor = True
         '
-        'GroupBox2
+        'optTypeProc4
         '
-        Me.GroupBox2.Controls.Add(Me.optCurve1)
-        Me.GroupBox2.Controls.Add(Me.optCurve2)
-        Me.GroupBox2.Controls.Add(Me.optCurve3)
-        Me.GroupBox2.Location = New System.Drawing.Point(15, 252)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(197, 122)
-        Me.GroupBox2.TabIndex = 2
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Curve Types"
+        Me.optTypeProc4.AutoSize = True
+        Me.optTypeProc4.Location = New System.Drawing.Point(6, 119)
+        Me.optTypeProc4.Name = "optTypeProc4"
+        Me.optTypeProc4.Size = New System.Drawing.Size(241, 24)
+        Me.optTypeProc4.TabIndex = 3
+        Me.optTypeProc4.TabStop = True
+        Me.optTypeProc4.Text = "Single Alignment w/ All Points"
+        Me.optTypeProc4.UseVisualStyleBackColor = True
         '
-        'optCurve1
+        'optTypeProc3
         '
-        Me.optCurve1.AutoSize = True
-        Me.optCurve1.Location = New System.Drawing.Point(6, 32)
-        Me.optCurve1.Name = "optCurve1"
-        Me.optCurve1.Size = New System.Drawing.Size(105, 24)
-        Me.optCurve1.TabIndex = 3
-        Me.optCurve1.TabStop = True
-        Me.optCurve1.Text = "PC, PI, PT"
-        Me.optCurve1.UseVisualStyleBackColor = True
+        Me.optTypeProc3.AutoSize = True
+        Me.optTypeProc3.Location = New System.Drawing.Point(8, 89)
+        Me.optTypeProc3.Name = "optTypeProc3"
+        Me.optTypeProc3.Size = New System.Drawing.Size(260, 24)
+        Me.optTypeProc3.TabIndex = 2
+        Me.optTypeProc3.TabStop = True
+        Me.optTypeProc3.Text = "All Alignments w/ Station Range"
+        Me.optTypeProc3.UseVisualStyleBackColor = True
         '
-        'optCurve2
+        'optTypeProc2
         '
-        Me.optCurve2.AutoSize = True
-        Me.optCurve2.Location = New System.Drawing.Point(6, 62)
-        Me.optCurve2.Name = "optCurve2"
-        Me.optCurve2.Size = New System.Drawing.Size(132, 24)
-        Me.optCurve2.TabIndex = 4
-        Me.optCurve2.TabStop = True
-        Me.optCurve2.Text = "PC, POST, PT"
-        Me.optCurve2.UseVisualStyleBackColor = True
+        Me.optTypeProc2.AutoSize = True
+        Me.optTypeProc2.Location = New System.Drawing.Point(8, 59)
+        Me.optTypeProc2.Name = "optTypeProc2"
+        Me.optTypeProc2.Size = New System.Drawing.Size(245, 24)
+        Me.optTypeProc2.TabIndex = 1
+        Me.optTypeProc2.TabStop = True
+        Me.optTypeProc2.Text = "All Alignments w/ Point Range"
+        Me.optTypeProc2.UseVisualStyleBackColor = True
         '
-        'optCurve3
+        'optTypeProc1
         '
-        Me.optCurve3.AutoSize = True
-        Me.optCurve3.Location = New System.Drawing.Point(6, 92)
-        Me.optCurve3.Name = "optCurve3"
-        Me.optCurve3.Size = New System.Drawing.Size(178, 24)
-        Me.optCurve3.TabIndex = 5
-        Me.optCurve3.TabStop = True
-        Me.optCurve3.Text = "PC,POST, POST, PT"
-        Me.optCurve3.UseVisualStyleBackColor = True
+        Me.optTypeProc1.AutoSize = True
+        Me.optTypeProc1.Location = New System.Drawing.Point(8, 29)
+        Me.optTypeProc1.Name = "optTypeProc1"
+        Me.optTypeProc1.Size = New System.Drawing.Size(210, 24)
+        Me.optTypeProc1.TabIndex = 0
+        Me.optTypeProc1.TabStop = True
+        Me.optTypeProc1.Text = "All Alignment w/All Points"
+        Me.optTypeProc1.UseVisualStyleBackColor = True
         '
-        'cmdSOA_Add
+        'cmdSOA_Print
         '
-        Me.cmdSOA_Add.Location = New System.Drawing.Point(15, 396)
-        Me.cmdSOA_Add.Name = "cmdSOA_Add"
-        Me.cmdSOA_Add.Size = New System.Drawing.Size(184, 43)
-        Me.cmdSOA_Add.TabIndex = 3
-        Me.cmdSOA_Add.Text = "NEW ALIGNMENT"
-        Me.cmdSOA_Add.UseVisualStyleBackColor = True
-        '
-        'cmdReplace
-        '
-        Me.cmdReplace.Location = New System.Drawing.Point(205, 396)
-        Me.cmdReplace.Name = "cmdReplace"
-        Me.cmdReplace.Size = New System.Drawing.Size(97, 43)
-        Me.cmdReplace.TabIndex = 4
-        Me.cmdReplace.Text = "REPLACE"
-        Me.cmdReplace.UseVisualStyleBackColor = True
-        '
-        'cmdSave
-        '
-        Me.cmdSave.Location = New System.Drawing.Point(308, 396)
-        Me.cmdSave.Name = "cmdSave"
-        Me.cmdSave.Size = New System.Drawing.Size(91, 43)
-        Me.cmdSave.TabIndex = 5
-        Me.cmdSave.Text = "SAVE"
-        Me.cmdSave.UseVisualStyleBackColor = True
-        '
-        'cmdDelete
-        '
-        Me.cmdDelete.Location = New System.Drawing.Point(405, 396)
-        Me.cmdDelete.Name = "cmdDelete"
-        Me.cmdDelete.Size = New System.Drawing.Size(91, 43)
-        Me.cmdDelete.TabIndex = 6
-        Me.cmdDelete.Text = "DELETE"
-        Me.cmdDelete.UseVisualStyleBackColor = True
-        '
-        'cmdCancel
-        '
-        Me.cmdCancel.Location = New System.Drawing.Point(502, 396)
-        Me.cmdCancel.Name = "cmdCancel"
-        Me.cmdCancel.Size = New System.Drawing.Size(91, 43)
-        Me.cmdCancel.TabIndex = 7
-        Me.cmdCancel.Text = "CANCEL"
-        Me.cmdCancel.UseVisualStyleBackColor = True
+        Me.cmdSOA_Print.Location = New System.Drawing.Point(468, 255)
+        Me.cmdSOA_Print.Name = "cmdSOA_Print"
+        Me.cmdSOA_Print.Size = New System.Drawing.Size(91, 43)
+        Me.cmdSOA_Print.TabIndex = 7
+        Me.cmdSOA_Print.Text = "Print"
+        Me.cmdSOA_Print.UseVisualStyleBackColor = True
         '
         'cmdSOA_Quit
         '
-        Me.cmdSOA_Quit.Location = New System.Drawing.Point(599, 396)
+        Me.cmdSOA_Quit.Location = New System.Drawing.Point(359, 255)
         Me.cmdSOA_Quit.Name = "cmdSOA_Quit"
         Me.cmdSOA_Quit.Size = New System.Drawing.Size(91, 43)
         Me.cmdSOA_Quit.TabIndex = 8
         Me.cmdSOA_Quit.Text = "QUIT"
         Me.cmdSOA_Quit.UseVisualStyleBackColor = True
         '
-        'txtBegAlign
-        '
-        Me.txtBegAlign.Location = New System.Drawing.Point(246, 35)
-        Me.txtBegAlign.Name = "txtBegAlign"
-        Me.txtBegAlign.Size = New System.Drawing.Size(468, 26)
-        Me.txtBegAlign.TabIndex = 9
-        '
-        'txtGP3Cnt
-        '
-        Me.txtGP3Cnt.Location = New System.Drawing.Point(246, 67)
-        Me.txtGP3Cnt.Name = "txtGP3Cnt"
-        Me.txtGP3Cnt.Size = New System.Drawing.Size(468, 26)
-        Me.txtGP3Cnt.TabIndex = 10
-        '
         'TextBox3
         '
-        Me.TextBox3.Location = New System.Drawing.Point(502, 143)
+        Me.TextBox3.Location = New System.Drawing.Point(428, 132)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(171, 26)
         Me.TextBox3.TabIndex = 11
         '
         'TextBox4
         '
-        Me.TextBox4.Location = New System.Drawing.Point(502, 186)
+        Me.TextBox4.Location = New System.Drawing.Point(428, 164)
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(171, 26)
         Me.TextBox4.TabIndex = 12
         '
         'TextBox5
         '
-        Me.TextBox5.Location = New System.Drawing.Point(502, 234)
+        Me.TextBox5.Location = New System.Drawing.Point(428, 196)
         Me.TextBox5.Name = "TextBox5"
         Me.TextBox5.Size = New System.Drawing.Size(171, 26)
         Me.TextBox5.TabIndex = 13
         '
-        'lblBegAlign
+        'lblSOA_Font
         '
-        Me.lblBegAlign.AutoSize = True
-        Me.lblBegAlign.Location = New System.Drawing.Point(20, 38)
-        Me.lblBegAlign.Name = "lblBegAlign"
-        Me.lblBegAlign.Size = New System.Drawing.Size(155, 20)
-        Me.lblBegAlign.TabIndex = 16
-        Me.lblBegAlign.Text = "Beginning Alignment"
+        Me.lblSOA_Font.AutoSize = True
+        Me.lblSOA_Font.Location = New System.Drawing.Point(380, 138)
+        Me.lblSOA_Font.Name = "lblSOA_Font"
+        Me.lblSOA_Font.Size = New System.Drawing.Size(42, 20)
+        Me.lblSOA_Font.TabIndex = 18
+        Me.lblSOA_Font.Text = "Font"
         '
-        'lblGP3Cnt
+        'lblSOA_Height
         '
-        Me.lblGP3Cnt.AutoSize = True
-        Me.lblGP3Cnt.Location = New System.Drawing.Point(20, 73)
-        Me.lblGP3Cnt.Name = "lblGP3Cnt"
-        Me.lblGP3Cnt.Size = New System.Drawing.Size(220, 20)
-        Me.lblGP3Cnt.TabIndex = 17
-        Me.lblGP3Cnt.Text = "Beginning GP3 Point Number "
+        Me.lblSOA_Height.AutoSize = True
+        Me.lblSOA_Height.Location = New System.Drawing.Point(366, 167)
+        Me.lblSOA_Height.Name = "lblSOA_Height"
+        Me.lblSOA_Height.Size = New System.Drawing.Size(56, 20)
+        Me.lblSOA_Height.TabIndex = 19
+        Me.lblSOA_Height.Text = "Height"
         '
-        'lblDesc
+        'lblSOA_Width
         '
-        Me.lblDesc.AutoSize = True
-        Me.lblDesc.Location = New System.Drawing.Point(401, 149)
-        Me.lblDesc.Name = "lblDesc"
-        Me.lblDesc.Size = New System.Drawing.Size(89, 20)
-        Me.lblDesc.TabIndex = 18
-        Me.lblDesc.Text = "Description"
-        '
-        'lblAlign
-        '
-        Me.lblAlign.AutoSize = True
-        Me.lblAlign.Location = New System.Drawing.Point(410, 192)
-        Me.lblAlign.Name = "lblAlign"
-        Me.lblAlign.Size = New System.Drawing.Size(80, 20)
-        Me.lblAlign.TabIndex = 19
-        Me.lblAlign.Text = "Alignment"
-        '
-        'lblStation
-        '
-        Me.lblStation.AutoSize = True
-        Me.lblStation.Location = New System.Drawing.Point(430, 240)
-        Me.lblStation.Name = "lblStation"
-        Me.lblStation.Size = New System.Drawing.Size(60, 20)
-        Me.lblStation.TabIndex = 20
-        Me.lblStation.Text = "Station"
-        '
-        'lblUnits
-        '
-        Me.lblUnits.AutoSize = True
-        Me.lblUnits.Location = New System.Drawing.Point(433, 286)
-        Me.lblUnits.Name = "lblUnits"
-        Me.lblUnits.Size = New System.Drawing.Size(46, 20)
-        Me.lblUnits.TabIndex = 21
-        Me.lblUnits.Text = "Units"
-        '
-        'comboUnits
-        '
-        Me.comboUnits.FormattingEnabled = True
-        Me.comboUnits.Items.AddRange(New Object() {"US", "Metric"})
-        Me.comboUnits.Location = New System.Drawing.Point(504, 277)
-        Me.comboUnits.Name = "comboUnits"
-        Me.comboUnits.Size = New System.Drawing.Size(95, 28)
-        Me.comboUnits.TabIndex = 23
+        Me.lblSOA_Width.AutoSize = True
+        Me.lblSOA_Width.Location = New System.Drawing.Point(372, 199)
+        Me.lblSOA_Width.Name = "lblSOA_Width"
+        Me.lblSOA_Width.Size = New System.Drawing.Size(50, 20)
+        Me.lblSOA_Width.TabIndex = 20
+        Me.lblSOA_Width.Text = "Width"
         '
         'MenuStrip2
         '
-        Me.MenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RunAlignmentToolStripMenuItem1, Me.CenterLineProcessWithSOEFileToolStripMenuItem, Me.PrintToolStripMenuItem1})
+        Me.MenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PrintToolStripMenuItem1})
         Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip2.Name = "MenuStrip2"
         Me.MenuStrip2.Size = New System.Drawing.Size(723, 33)
         Me.MenuStrip2.TabIndex = 24
         Me.MenuStrip2.Text = "MenuStrip2"
-        '
-        'RunAlignmentToolStripMenuItem1
-        '
-        Me.RunAlignmentToolStripMenuItem1.Name = "RunAlignmentToolStripMenuItem1"
-        Me.RunAlignmentToolStripMenuItem1.Size = New System.Drawing.Size(142, 29)
-        Me.RunAlignmentToolStripMenuItem1.Text = "Run Alignment"
-        '
-        'CenterLineProcessWithSOEFileToolStripMenuItem
-        '
-        Me.CenterLineProcessWithSOEFileToolStripMenuItem.Name = "CenterLineProcessWithSOEFileToolStripMenuItem"
-        Me.CenterLineProcessWithSOEFileToolStripMenuItem.Size = New System.Drawing.Size(283, 29)
-        Me.CenterLineProcessWithSOEFileToolStripMenuItem.Text = "Center Line Process with SOE File"
         '
         'PrintToolStripMenuItem1
         '
@@ -367,36 +261,45 @@
         Me.PrintToolStripMenuItem1.Size = New System.Drawing.Size(60, 29)
         Me.PrintToolStripMenuItem1.Text = "Print"
         '
+        'ckhPnt
+        '
+        Me.ckhPnt.AutoSize = True
+        Me.ckhPnt.Location = New System.Drawing.Point(16, 46)
+        Me.ckhPnt.Name = "ckhPnt"
+        Me.ckhPnt.Size = New System.Drawing.Size(290, 24)
+        Me.ckhPnt.TabIndex = 25
+        Me.ckhPnt.Text = "Do you want to process every point?"
+        Me.ckhPnt.UseVisualStyleBackColor = True
+        '
+        'lstSoa_Sort
+        '
+        Me.lstSoa_Sort.FormattingEnabled = True
+        Me.lstSoa_Sort.ItemHeight = 20
+        Me.lstSoa_Sort.Location = New System.Drawing.Point(52, 382)
+        Me.lstSoa_Sort.Name = "lstSoa_Sort"
+        Me.lstSoa_Sort.Size = New System.Drawing.Size(613, 44)
+        Me.lstSoa_Sort.TabIndex = 26
+        Me.lstSoa_Sort.Visible = False
+        '
         'frmSoaInp
         '
         Me.ClientSize = New System.Drawing.Size(723, 489)
-        Me.Controls.Add(Me.comboUnits)
-        Me.Controls.Add(Me.lblUnits)
-        Me.Controls.Add(Me.lblStation)
-        Me.Controls.Add(Me.lblAlign)
-        Me.Controls.Add(Me.lblDesc)
-        Me.Controls.Add(Me.lblGP3Cnt)
-        Me.Controls.Add(Me.lblBegAlign)
+        Me.Controls.Add(Me.lstSoa_Sort)
+        Me.Controls.Add(Me.ckhPnt)
+        Me.Controls.Add(Me.lblSOA_Width)
+        Me.Controls.Add(Me.lblSOA_Height)
+        Me.Controls.Add(Me.lblSOA_Font)
         Me.Controls.Add(Me.TextBox5)
         Me.Controls.Add(Me.TextBox4)
         Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.txtGP3Cnt)
-        Me.Controls.Add(Me.txtBegAlign)
         Me.Controls.Add(Me.cmdSOA_Quit)
-        Me.Controls.Add(Me.cmdCancel)
-        Me.Controls.Add(Me.cmdDelete)
-        Me.Controls.Add(Me.cmdSave)
-        Me.Controls.Add(Me.cmdReplace)
-        Me.Controls.Add(Me.cmdSOA_Add)
-        Me.Controls.Add(Me.GroupBox2)
+        Me.Controls.Add(Me.cmdSOA_Print)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.MenuStrip2)
         Me.MainMenuStrip = Me.MenuStrip2
         Me.Name = "frmSoaInp"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
         Me.MenuStrip2.ResumeLayout(False)
         Me.MenuStrip2.PerformLayout()
         Me.ResumeLayout(False)
@@ -408,34 +311,24 @@
     Friend WithEvents CenterLineProcessUsingSOEFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PrintToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents optType3 As System.Windows.Forms.RadioButton
-    Friend WithEvents optType2 As System.Windows.Forms.RadioButton
-    Friend WithEvents optType1 As System.Windows.Forms.RadioButton
-    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents optCurve1 As System.Windows.Forms.RadioButton
-    Friend WithEvents optCurve2 As System.Windows.Forms.RadioButton
-    Friend WithEvents optCurve3 As System.Windows.Forms.RadioButton
-    Friend WithEvents cmdSOA_Add As System.Windows.Forms.Button
-    Friend WithEvents cmdReplace As System.Windows.Forms.Button
-    Friend WithEvents cmdSave As System.Windows.Forms.Button
-    Friend WithEvents cmdDelete As System.Windows.Forms.Button
-    Friend WithEvents cmdCancel As System.Windows.Forms.Button
+    Friend WithEvents optTypeProc3 As System.Windows.Forms.RadioButton
+    Friend WithEvents optTypeProc2 As System.Windows.Forms.RadioButton
+    Friend WithEvents optTypeProc1 As System.Windows.Forms.RadioButton
+    Friend WithEvents cmdSOA_Print As System.Windows.Forms.Button
     Friend WithEvents cmdSOA_Quit As System.Windows.Forms.Button
-    Friend WithEvents txtBegAlign As System.Windows.Forms.TextBox
-    Friend WithEvents txtGP3Cnt As System.Windows.Forms.TextBox
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox5 As System.Windows.Forms.TextBox
-    Friend WithEvents lblBegAlign As System.Windows.Forms.Label
-    Friend WithEvents lblGP3Cnt As System.Windows.Forms.Label
-    Friend WithEvents lblDesc As System.Windows.Forms.Label
-    Friend WithEvents lblAlign As System.Windows.Forms.Label
-    Friend WithEvents lblStation As System.Windows.Forms.Label
-    Friend WithEvents lblUnits As System.Windows.Forms.Label
-    Friend WithEvents comboUnits As System.Windows.Forms.ComboBox
+    Friend WithEvents lblSOA_Font As System.Windows.Forms.Label
+    Friend WithEvents lblSOA_Height As System.Windows.Forms.Label
+    Friend WithEvents lblSOA_Width As System.Windows.Forms.Label
     Friend WithEvents MenuStrip2 As System.Windows.Forms.MenuStrip
-    Friend WithEvents RunAlignmentToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CenterLineProcessWithSOEFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PrintToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ckhPnt As System.Windows.Forms.CheckBox
+    Friend WithEvents optTypeProc7 As System.Windows.Forms.RadioButton
+    Friend WithEvents optTypeProc6 As System.Windows.Forms.RadioButton
+    Friend WithEvents optTypeProc5 As System.Windows.Forms.RadioButton
+    Friend WithEvents optTypeProc4 As System.Windows.Forms.RadioButton
+    Friend WithEvents lstSoa_Sort As System.Windows.Forms.ListBox
 #End Region 
 End Class
